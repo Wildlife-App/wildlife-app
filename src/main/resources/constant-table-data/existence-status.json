@@ -1,0 +1,47 @@
+[
+  {
+    "existenceStatusId": "EX",
+    "existenceStatus": "Extinct",
+    "existenceStatusDescription": "No known living individuals."
+  },
+  {
+    "existenceStatusId": "EW",
+    "existenceStatus": "Extinct in the wild",
+    "existenceStatusDescription": "Known only to survive in captivity, or as a naturalized population outside its historic range."
+  },
+  {
+    "existenceStatusId": "CR",
+    "existenceStatus": "Critically endangered",
+    "existenceStatusDescription": "Extremely high risk of extinction in the wild"
+  },
+  {
+    "existenceStatusId": "EN",
+    "existenceStatus": "Endangered  ",
+    "existenceStatusDescription": "High risk of extinction in the wild"
+  },
+  {
+    "existenceStatusId": "VU",
+    "existenceStatus": "Vulnerable",
+    "existenceStatusDescription": "High risk of endangerment in the wild"
+  },
+  {
+    "existenceStatusId": "NT",
+    "existenceStatus": "Near threatened",
+    "existenceStatusDescription": "Likely to become endangered in the near future"
+  },
+  {
+    "existenceStatusId": "LC",
+    "existenceStatus": "Least concern",
+    "existenceStatusDescription": "Lowest risk; does not qualify for a higher risk category. Widespread and abundant taxa are included in this category."
+  },
+  {
+    "existenceStatusId": "DD",
+    "existenceStatus": "Data deficient",
+    "existenceStatusDescription": "Not enough data to make an assessment of its risk of extinction"
+  },
+  {
+    "existenceStatusId": "NE",
+    "existenceStatus": "Not evaluated",
+    "existenceStatusDescription": "Has not yet been evaluated against the criteria."
+  }
+]
