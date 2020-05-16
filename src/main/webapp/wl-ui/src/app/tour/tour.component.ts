@@ -7,6 +7,7 @@ import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
 import {MAX_DATE, MIN_DATE, ValidatorUtils} from "../utils/validator-utils";
 import {DisplayMessageModel} from "../models/display.message.model";
 import {TourModel} from "../models/tour.model";
+import {formatUrl} from "../app.component";
 
 @Component({
   selector: 'app-tour',
@@ -81,7 +82,7 @@ export class TourComponent implements OnInit {
     });
   }
 
-  buildForm(): void {
+  private buildForm(): void {
     this.tourForm = this.formBuilder.group({
       selectedLocation: ['', [
         Validators.required,
@@ -95,8 +96,8 @@ export class TourComponent implements OnInit {
     });
   }
 
-  async loadLocations(): Promise<void> {
-    await this.httpService.get('/locations').toPromise().then(data => {
+  private async loadLocations(): Promise<void> {
+    await this.httpService.getResource(formatUrl('/locations')).toPromise().then(data => {
       console.log('Fetched locations', data);
       data.content.forEach(item => {
         this.allLocations.push(LocationModel.fromData(item));
@@ -109,7 +110,7 @@ export class TourComponent implements OnInit {
     });
   }
 
-  resolveRouteVariable() {
+  private resolveRouteVariable() {
     this.activatedRoute.queryParams.subscribe(params => {
       const resourceId = +params['resourceId'];
       console.log('Params value', params, resourceId);
@@ -129,7 +130,7 @@ export class TourComponent implements OnInit {
     });
   }
 
-  validateTourForm() {
+  private validateTourForm() {
     this.isSubmittable = true;
     ValidatorUtils.validateForm(this.tourForm, this.validationMessages, this.formErrors);
     if (!this.tourForm.touched || this.tourForm.pristine) {
@@ -142,7 +143,7 @@ export class TourComponent implements OnInit {
     }
   }
 
-  selectLocation(resourceId?: number) {
+  private selectLocation(resourceId?: number) {
     const id = resourceId ? resourceId : +this.tourForm.get('selectedLocation').value;
     for (let loc of this.allLocations) {
       if (loc.resourceId === id) {
@@ -152,7 +153,7 @@ export class TourComponent implements OnInit {
     }
   }
 
-  setToDateConfig(fromDateStr: string): void {
+  private setToDateConfig(fromDateStr: string): void {
     const fromDate: Date = new Date(fromDateStr);
     console.log('From DateStr:', fromDateStr);
     console.log('From Date:', fromDate);
@@ -167,7 +168,7 @@ export class TourComponent implements OnInit {
     console.log('Config after set:', this.toDatePickerConfig);
   }
 
-  isInvalidFromDate(): boolean | null {
+  private isInvalidFromDate(): boolean | null {
     const control: AbstractControl = this.tourForm.get('tourDuration').get('fromDate');
     const fromDate: Date = new Date(control.value);
     if (fromDate && fromDate.getDay() > 0 && control.valid) {
@@ -192,7 +193,7 @@ export class TourComponent implements OnInit {
   }
 
   private postData(tour: TourModel) {
-    this.httpService.post('/tours', tour).subscribe(data => {
+    this.httpService.postResource(formatUrl('/tours'), tour).subscribe(data => {
       console.log('Tour added', data);
       this.resetForm();
       this.displayMessage.newInfoMessage('Tour created. Navigating to the summary page... ');

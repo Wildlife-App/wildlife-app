@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorUtils} from "../utils/validator-utils";
 import {HttpService} from "../http.service";
 import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
+import {formatUrl} from "../app.component";
 
 @Component({
   selector: 'app-add-animal',
@@ -118,7 +119,7 @@ export class AddAnimalComponent implements OnInit {
   }
 
   fetchData(url: string, list: any[]) {
-    this.httpService.get(url).subscribe(data => {
+    this.httpService.getResource(formatUrl(url)).subscribe(data => {
       console.log('Fetched data', data);
       for (let a of data.content) {
         list.push(a);
@@ -156,7 +157,7 @@ export class AddAnimalComponent implements OnInit {
       firstSpottingDate: this.animalForm.get('spottingDate').value
     };
     console.log('Posting data', animal);
-    this.httpService.post('/animals', animal).subscribe(data => {
+    this.httpService.postResource(formatUrl('/animals'), animal).subscribe(data => {
       console.log('Saved animal', data);
     }, error => {
       console.log('Error occurred', error);

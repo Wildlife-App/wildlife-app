@@ -7,6 +7,8 @@ import {NewLocationDetailsComponent} from "./new-location-details/new-location-d
 import {TourComponent} from "./tour/tour.component";
 import {CanDeactivateNewPlaceService} from "./route-guards/can-deactivate-new-place.service";
 import {PosterComponent} from "./poster/poster.component";
+import {ErrorComponent} from "./error/error.component";
+import {TourDetailsComponent} from "./tour-details/tour-details.component";
 
 const routes: Routes = [
   {
@@ -16,6 +18,14 @@ const routes: Routes = [
   {
     path: 'home',
     component: SummaryComponent
+  },
+  {
+    path: 'tours',
+    component: SummaryComponent
+  },
+  {
+    path: 'tours/:id',
+    component: TourDetailsComponent
   },
   {
     path: 'add',
@@ -43,6 +53,10 @@ const routes: Routes = [
         component: TourComponent
       }
     ]
+  },
+  {
+    path: '**',
+    component: ErrorComponent
   }
 ];
 

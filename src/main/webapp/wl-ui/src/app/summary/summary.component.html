@@ -7,15 +7,30 @@
       </div>
       <!-- If tours are recorded -->
       <div *ngFor="let tour of tours">
-        <a href="#">
+        <a href="#" title="Show details of this tour." [routerLink]="['/tours', tour.resourceId]">
           <div class="margin-top-xx-lg panel-hover">
             <div class="panel panel-primary ">
-              <div class="panel-heading">
+              <div class="panel-heading font-lg">
                 Tour to {{tour.location.locationName}}
               </div>
-              <div class="panel-body padding-x-lg">
-                Start date : {{tour.startDate | date}}
-                End date : {{tour.endDate | date}}
+              <div class="panel-body padding-x-lg font-lg">
+                <div class="row">
+                  <div class="col-sm-4">
+
+                  </div>
+                  <div class="col-sm-4">
+                    <table>
+                      <tr>
+                        <td class="text-right padding-md">Start Date :</td>
+                        <td class="padding-md">{{tour.startDate | date}}</td>
+                      </tr>
+                      <tr>
+                        <td class="text-right padding-md">End date :</td>
+                        <td class="padding-md">{{tour.endDate | date}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
               </div>
               <div class="panel-footer">
               </div>

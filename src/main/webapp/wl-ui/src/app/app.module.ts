@@ -20,6 +20,7 @@ import { MessageComponent } from './message/message.component';
 import {CanDeactivateNewPlaceService} from "./route-guards/can-deactivate-new-place.service";
 import { PosterComponent } from './poster/poster.component';
 import { TourDetailsComponent } from './tour-details/tour-details.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TourDetailsComponent } from './tour-details/tour-details.component';
     FormTesterComponent,
     MessageComponent,
     PosterComponent,
-    TourDetailsComponent
+    TourDetailsComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

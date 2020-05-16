@@ -251,11 +251,12 @@ div.cui-card {
 
 .position-center {
   margin-left: 33%;
-  margin-top: 1%;
+  margin-top: 4%;
 }
 
 .card {
   /* Add shadows to create the "card" effect */
+  background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
@@ -283,7 +284,6 @@ div.cui-card {
 }
 
 .add-location-div :after {
-
   opacity: 0.5;
 }
 
@@ -342,11 +342,16 @@ div.title h1 {
 }
 
 body {
-  background-color: rgba(75, 155, 180, 0.27);
+  /*background-color: rgba(75, 155, 180, 0.27);*/
+  background-color: rgba(32, 32, 32, 0.81);
 }
 
 .navbar-blue {
   background-color: #337ab7;
   border-color: #337ab7;
   color: white;
+}
+
+.error {
+  color: red!important;
 }

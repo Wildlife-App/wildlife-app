@@ -7,6 +7,7 @@ import {StateModel} from "../models/state.model";
 import {CountryModel} from "../models/country.model";
 import {LocationModel} from "../models/location.model";
 import {DisplayMessageModel} from "../models/display.message.model";
+import {formatUrl} from "../app.component";
 
 let httpServiceInject: HttpService;
 
@@ -87,7 +88,7 @@ export class LocationComponent implements OnInit {
   fetchCountries() {
     this.countries.length = 0;
     this.states.length = 0;
-    this.httpService.get('/countries').subscribe(data => {
+    this.httpService.getResource(formatUrl('/countries')).subscribe(data => {
       const allCountries: CountryModel[] = data.content;
 
       console.log('Fetched countries', allCountries);
@@ -126,7 +127,7 @@ export class LocationComponent implements OnInit {
   }
 
   fetchValidationMessages(): void {
-    this.httpService.get('/validations/addLocationForm').subscribe(data => {
+    this.httpService.getResource(formatUrl('/validations/addLocationForm')).subscribe(data => {
       console.log('Fetched validation messages', data);
       for (let formField in data.formFields) {
         const fieldValidation = {};
@@ -136,7 +137,7 @@ export class LocationComponent implements OnInit {
 
   postData(location: LocationModel): void {
     console.log('Posting location: ', location);
-    this.httpService.post('/locations', location).subscribe(
+    this.httpService.postResource(formatUrl('/locations'), location).subscribe(
       data => {
         console.log('location saved', data);
         console.log('Resetting form.')

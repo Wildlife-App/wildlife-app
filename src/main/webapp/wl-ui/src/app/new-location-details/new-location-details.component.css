@@ -1,19 +1,23 @@
 .place-input {
-  border: 1px solid #e2e2e2;
+  border: 1px solid #3c3c3c;
+  background-color: #3c3c3c;
+  color: white;
   border-radius: 5px;
   padding: 20px 20px 20px;
   text-align: center;
 }
 a.place-select {
-  color: black;
+  color: white;
 }
 a.place-select:hover {
-  color: darkcyan;
+  color: black;
 }
 .selected-option {
  color: green;
 }
-
+.place-input > div {
+  color: white;
+}
 @media screen and (max-height: 1080px) and (max-width: 1920px){
   .place-input {
     padding: 10px 10px 10px;

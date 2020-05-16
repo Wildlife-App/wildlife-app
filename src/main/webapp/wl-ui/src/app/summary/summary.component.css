@@ -3,7 +3,9 @@ a > .panel-hover:hover {
   font-size: larger;
   box-shadow: 5px 5px 10px;
 }
-
+a:hover {
+  text-decoration: none;
+}
 .top-20 {
   margin-top: 40px;
 }

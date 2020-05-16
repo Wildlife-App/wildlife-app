@@ -16,6 +16,16 @@ export class TourModel extends BaseResource {
   startDate: Date;
   endDate: Date;
   location: any;
+  private _isEmpty: boolean = false;
+
+  private empty(): TourModel {
+    this._isEmpty = true;
+    return this;
+  }
+
+  isEmpty(): boolean {
+    return this._isEmpty;
+  }
 
   static fromData(data: TourModel): TourModel {
     const tour: TourModel = new TourModel(data.startDate, data.endDate,
@@ -24,6 +34,7 @@ export class TourModel extends BaseResource {
     tour.links = tour.fromLinks(data.links);
     return tour;
   }
+
   static fromDataForView(data: TourModel): TourModel {
     const tour: TourModel = new TourModel(data.startDate, data.endDate,
       LocationModel.fromData(data.location),
@@ -31,4 +42,9 @@ export class TourModel extends BaseResource {
     tour.links = tour.fromLinks(data.links);
     return tour;
   }
+
+  static empty() {
+    return new TourModel(new Date(), new Date(), '').empty();
+  }
+
 }

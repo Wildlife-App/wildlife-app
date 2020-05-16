@@ -17,7 +17,7 @@ export class SummaryComponent implements OnInit {
   }
 
   private tours: TourModel[] = [];
-  private recordPerPage: number = 4;
+  private recordPerPage: number = 3;
   private prevLinkUrl: string = '#';
   private nextLinkUrl: string = '#';
   private currentPage: number = 0;
@@ -27,7 +27,12 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit() {
     const url: string = '/tours?page=' + this.currentPage + '&size=' + this.recordPerPage;
-    this.loadData(formatUrl(url));
+
+    setTimeout(() => {
+        this.loadData(formatUrl(url));
+      },
+      3000);
+
   }
 
   next() {
