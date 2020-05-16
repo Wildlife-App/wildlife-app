@@ -1,0 +1,21 @@
+.place-input {
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  padding: 20px 20px 20px;
+  text-align: center;
+}
+a.place-select {
+  color: black;
+}
+a.place-select:hover {
+  color: darkcyan;
+}
+.selected-option {
+ color: green;
+}
+
+@media screen and (max-height: 1080px) and (max-width: 1920px){
+  .place-input {
+    padding: 10px 10px 10px;
+  }
+}

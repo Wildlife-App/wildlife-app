@@ -1,0 +1,25 @@
+<div class="container-fluid padding-x-lg">
+  <div class="header-section text-center">
+    <h1>Add a new tour</h1>
+  </div>
+
+  <div class="row place-input font-lg">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-6">
+      <ul class="nav nav-pills" role="tablist">
+        <li routerLinkActive="active">
+          <a class="place-select" routerLink="existing">
+            <span class="glyphicon glyphicon-globe"></span> I went to a place I already visited
+          </a>
+        </li>
+        <li routerLinkActive="active" style="margin-left: 20px;">
+          <a class="place-select" routerLink="newlocation">
+            <span class="glyphicon glyphicon-globe"></span> I went to a new place
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

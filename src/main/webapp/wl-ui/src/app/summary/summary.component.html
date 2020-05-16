@@ -1,0 +1,62 @@
+<div class="container-fluid" style="margin-top:50px;">
+  <div class="row margin-top-xx-lg">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8 card info-box">
+      <div class="title text-center">
+        <h1>Showing tours from {{startRecordIndex}} to {{endRecordIndex}} of total {{totalRecords}} tours</h1>
+      </div>
+      <!-- If tours are recorded -->
+      <div *ngFor="let tour of tours">
+        <a href="#">
+          <div class="margin-top-xx-lg panel-hover">
+            <div class="panel panel-primary ">
+              <div class="panel-heading">
+                Tour to {{tour.location.locationName}}
+              </div>
+              <div class="panel-body padding-x-lg">
+                Start date : {{tour.startDate | date}}
+                End date : {{tour.endDate | date}}
+              </div>
+              <div class="panel-footer">
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- If no tour is recorded -->
+      <div class="panel panel-primary" *ngIf="tours.length === 0" style="margin-top: 100px;">
+        <div class="panel-heading">
+          No Tour
+        </div>
+        <div class="panel-body">
+          <h1 class="text-center padding-x-lg">No Tour Recorded</h1>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-sm-9"></div>
+            <div class="col-sm-3 text-right">
+              <a class="btn btn-primary" routerLink="/newtour">Add Tour</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br><br>
+      <div class="row">
+        <div class="col-sm-12 text-center btn-group btn-group-lg" style="left: 45%;">
+          <a class="btn btn-primary" (click)="prev()"
+             [title]="(this.prevLinkUrl === '#') ? '' : 'Show previous ' + recordPerPage + ' records'"
+             [attr.disabled]="(this.prevLinkUrl === '#') ? true : null">
+            &lt; Prev
+          </a>
+          <a class="btn btn-primary" (click)="next()"
+             [title]="(this.nextLinkUrl === '#') ? '' : 'Show next ' + recordPerPage + ' records'"
+             [attr.disabled]="(this.nextLinkUrl === '#') ? true : null">
+            Next &gt;
+          </a>
+        </div>
+      </div>
+      <br><br>
+    </div>
+  </div>
+</div>

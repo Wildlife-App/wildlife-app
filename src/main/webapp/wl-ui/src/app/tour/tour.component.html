@@ -1,0 +1,95 @@
+<div class="card form-section position-center">
+  <div class="add-location-div standard-padding-sm"
+       style="background-image: url('assets/images/forest-wide-1.jpg'); background-size: 100%;">
+    <div class="title">
+      <h1 class="text-center">
+        {{selectedLocation && selectedLocation.locationName ? (('Tour to ' + selectedLocation.locationName))
+          : 'Add a Tour Record'}}
+      </h1>
+    </div>
+  </div>
+  <app-message [displayMessage]="displayMessage"></app-message>
+  <div [formGroup]="tourForm" class="standard-padding">
+    <!-- Row 1 : Location Name-->
+    <div class="row form-group" [ngClass]="{'has-error': formErrors.selectedLocation}">
+      <div class="col-sm-3 text-right">
+        <label for="locationName" class="control-label form-label">Location Name<sup class="required">*</sup></label>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-map font-x-lg"></i></span>
+          <select class="form-control input-lg background-white" id="locationName" formControlName="selectedLocation"
+                  (blur)="validateTourForm()" [attr.disabled]="isRedirected ? 'disabled' : null"
+                  (change)="selectLocation()">
+            <option value="">-- Select a Location --</option>
+            <option *ngFor="let location of allLocations"
+                    [ngValue]="location.getSelfLink()">{{location.locationName}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <span *ngIf="formErrors.selectedLocation">
+          <small class="pull-right required margin-top-md">{{formErrors.selectedLocation}}</small>
+        </span>
+      </div>
+    </div>
+    <!-- Row 1 complete -->
+    <div [formGroup]="tourForm.get('tourDuration')">
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.fromDate || formErrors.tourDuration}">
+        <div class="col-sm-3 text-right">
+          <label for="fromDate" class="control-label form-label">Tour Start Date<sup class="required">*</sup></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar font-x-lg"></i></span>
+            <input class="form-control input-lg background-white" id="fromDate"
+                   formControlName="fromDate" placement="top"
+                   placeholder="Tour start date" (blur)="validateTourForm()"
+                   type="text" bsDatepicker [bsConfig]="fromDatePickerConfig">
+          </div>
+        </div>
+        <div class="col-sm-3">
+        <span *ngIf="formErrors.fromDate">
+          <small class="pull-right required margin-top-md">{{formErrors.fromDate}}</small>
+        </span>
+        </div>
+      </div>
+      <!-- From date complete -->
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.toDate || formErrors.tourDuration}">
+        <div class="col-sm-3 text-right">
+          <label for="toDate" class="control-label form-label">Tour End Date<sup class="required">*</sup></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar font-x-lg"></i></span>
+            <input class="form-control input-lg background-white" id="toDate" formControlName="toDate"
+                   placeholder="Tour end date" (blur)="validateTourForm()" [attr.disabled]="isInvalidFromDate()"
+
+                   bsDatepicker [bsConfig]="toDatePickerConfig" placement="top">
+          </div>
+        </div>
+        <div class="col-sm-3">
+        <span *ngIf="formErrors.toDate || formErrors.tourDuration">
+          <small class="pull-right required margin-top-md">
+            {{formErrors.toDate ? formErrors.toDate : formErrors.tourDuration}}
+          </small>
+        </span>
+        </div>
+      </div>
+    </div>
+    <!-- TO date complete-->
+
+    <br>
+    <div class="btn-group btn-group-lg float-right" style="margin-top: 20px">
+      <button class="btn btn-lg btn-default" (click)="resetForm()"
+              [attr.disabled] = "tourForm.pristine ? 'disabled' :null">
+        <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
+      </button>
+      <button class="btn btn-lg btn-primary" (click)="validateTourForm(); saveTour();"
+              [attr.disabled] = "!isSubmittable ? 'true' :null">
+        <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
+      </button>
+    </div>
+    <br><br>
+  </div>
+</div>

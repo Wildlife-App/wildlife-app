@@ -1,0 +1,12 @@
+.image-back {
+  background-image: url('/assets/images/wildlife-background-1.jpg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  opacity: 60%;
+  z-index: -1;
+  width: 75%;
+  min-height: 1000px;
+  max-height: 1200px;
+  border: 1px solid white;
+  border-radius: 20px;
+}

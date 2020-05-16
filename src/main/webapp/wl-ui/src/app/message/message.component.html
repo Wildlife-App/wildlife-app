@@ -1,0 +1,8 @@
+<div class="row" *ngIf="displayMessage.hasContent()">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8 alert text-center margin-top-lg"
+       [ngClass]="displayMessage.isInfo() ? 'alert-info' : 'alert-danger'">
+    {{displayMessage.MessageText}}
+  </div>
+  <div class="col-sm-2"></div>
+</div>

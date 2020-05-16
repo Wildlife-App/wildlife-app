@@ -1,0 +1,109 @@
+<div class="card form-section position-center">
+  <div class="add-location-div standard-padding-sm narrow-box"
+       style="background-image: url('assets/images/forest-p-1.jpg'); background-size: 100%;">
+    <div class="title">
+      <h1 class="text-center">Add a Location</h1>
+    </div>
+  </div>
+
+  <app-message [displayMessage]="displayMessage"></app-message>
+
+  <div [formGroup]="locationForm" class="standard-padding">
+    <div class="row form-group" [ngClass]="{'has-error': formErrors.locationName}">
+      <div class="col-sm-3 text-right">
+        <label for="locationName" class="control-label form-label">Location Name<sup class="required">*</sup></label>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-map font-x-lg"></i></span>
+          <input class="form-control input-lg background-white" id="locationName" formControlName="locationName"
+                 (blur)="validateForm(locationForm);" placeholder="Location Name">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <span *ngIf="formErrors.locationName">
+          <small class="float-right required margin-top-md">{{formErrors.locationName}}</small>
+        </span>
+      </div>
+    </div>
+    <!-- Row 1 complete -->
+    <div [formGroup]="locationForm.get('stateCountryGroup')">
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.country}">
+        <div class="col-sm-3 text-right">
+          <label for="country" class="control-label form-label">Country<sup class="required">*</sup></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-globe font-x-lg"></i></span>
+            <select class="form-control input-lg background-white" id="country" formControlName="country"
+                    (change)="fetchStates()" (blur)="validateForm(locationForm)">
+              <option value="">-- Select Country --</option>
+              <option *ngFor="let country of countries"
+                      [value]="country.internationalCode">{{country.countryName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+        <span *ngIf="formErrors.country">
+          <small class="float-right required margin-top-md">{{formErrors.country}}</small>
+        </span>
+        </div>
+      </div>
+      <!-- Row 2 complete -->
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.state}">
+        <div class="col-sm-3 text-right">
+          <label for="state" class="control-label form-label">State<sup class="required">*</sup></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-globe font-x-lg"></i></span>
+            <select class="form-control input-lg background-white" id="state" formControlName="state"
+                    (blur)="validateForm(locationForm)">
+              <option value="">-- Select State --</option>
+              <option *ngFor="let state of states" [value]="state.getSelfLink()">{{state.stateName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+        <span *ngIf="formErrors.state">
+          <small class="pull-right required margin-top-md">{{formErrors.state}}</small>
+        </span>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group" [ngClass]="{'has-error': formErrors.area}">
+      <div class="col-sm-3 text-right">
+        <label for="area" class="control-label form-label">Area(In km<sup>2</sup>)</label>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-area-chart font-x-lg"></i></span>
+          <input type="number" class="form-control input-lg background-white" id="area" formControlName="area">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <span *ngIf="formErrors.area">
+          <small class="float-right required margin-top-md">{{formErrors.area}}</small>
+        </span>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-sm-7">
+        <br><br><br>
+      </div>
+      <div class="col-sm-4 btn-group btn-group-lg ">
+        <button class="btn btn-lg btn-default" (click)="resetLocationForm()"
+                [attr.disabled] = "locationForm.pristine ? 'disabled' :null">
+          <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
+        </button>
+        <button class="btn btn-lg btn-primary" (click)="saveLocation()"
+                [attr.disabled] = "!isSubmittable ? 'true' :null">
+          <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

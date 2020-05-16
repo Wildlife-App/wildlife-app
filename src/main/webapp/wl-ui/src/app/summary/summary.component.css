@@ -1,0 +1,15 @@
+a > .panel-hover:hover {
+  font-weight: bolder;
+  font-size: larger;
+  box-shadow: 5px 5px 10px;
+}
+
+.top-20 {
+  margin-top: 40px;
+}
+
+.info-box {
+  background-color: white;
+  padding-left: 50px;
+  padding-right: 50px;
+}

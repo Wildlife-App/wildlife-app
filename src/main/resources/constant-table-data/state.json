@@ -20,38 +20,43 @@
     "countryCode": "IN"
   },
   {
-    "stateCode": "",
-    "stateName": "",
+    "stateCode": "NSW",
+    "stateName": "New South Wales",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "QLD",
+    "stateName": "Queensland",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "SA",
+    "stateName": "South Australia",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "TAS",
+    "stateName": "Tasmania",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "VIC",
+    "stateName": "Victoria",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "WA",
+    "stateName": "Western Australia",
+    "countryCode": "AU"
+  },
+  {
+    "stateCode": "RJ",
+    "stateName": "Rajasthan",
     "countryCode": "IN"
   },
   {
-    "stateCode": "",
-    "stateName": "",
-    "countryCode": "IN"
-  },
-  {
-    "stateCode": "",
-    "stateName": "",
-    "countryCode": "IN"
-  },
-  {
-    "stateCode": "",
-    "stateName": "",
-    "countryCode": "IN"
-  },
-  {
-    "stateCode": "",
-    "stateName": "",
-    "countryCode": "IN"
-  },
-  {
-    "stateCode": "",
-    "stateName": "",
-    "countryCode": "IN"
-  },
-  {
-    "stateCode": "",
-    "stateName": "",
+    "stateCode": "GJ",
+    "stateName": "Gujrat",
     "countryCode": "IN"
   }
 ]

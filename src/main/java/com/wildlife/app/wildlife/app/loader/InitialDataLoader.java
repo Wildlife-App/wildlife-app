@@ -2,32 +2,28 @@ package com.wildlife.app.wildlife.app.loader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wildlife.app.wildlife.app.exception.AppLoadingException;
-import com.wildlife.app.wildlife.app.loader.repository.AnimalTypeRepository;
-import com.wildlife.app.wildlife.app.loader.repository.CountryRepository;
-import com.wildlife.app.wildlife.app.loader.repository.ExistenceStatusRepository;
-import com.wildlife.app.wildlife.app.loader.repository.FoodHabitTypeRepository;
-import com.wildlife.app.wildlife.app.loader.repository.StateRepository;
-import com.wildlife.app.wildlife.app.models.db.constants.tables.AnimalType;
-import com.wildlife.app.wildlife.app.models.db.constants.ConstantData;
-import com.wildlife.app.wildlife.app.models.db.constants.tables.Country;
-import com.wildlife.app.wildlife.app.models.db.constants.tables.ExistenceStatus;
-import com.wildlife.app.wildlife.app.models.db.constants.tables.FoodHabitType;
-import com.wildlife.app.wildlife.app.models.db.constants.tables.State;
+import com.wildlife.app.wildlife.app.models.constants.ConstantData;
+import com.wildlife.app.wildlife.app.models.constants.tables.AnimalType;
+import com.wildlife.app.wildlife.app.models.constants.tables.ExistenceStatus;
+import com.wildlife.app.wildlife.app.models.constants.tables.FoodHabitType;
+import com.wildlife.app.wildlife.app.models.constants.tables.MenuItem;
+import com.wildlife.app.wildlife.app.models.constants.tables.validation.ValidForm;
+import com.wildlife.app.wildlife.app.repository.AnimalTypeRepository;
+import com.wildlife.app.wildlife.app.repository.ExistenceStatusRepository;
+import com.wildlife.app.wildlife.app.repository.FoodHabitTypeRepository;
+import com.wildlife.app.wildlife.app.repository.MenuItemRepository;
+import com.wildlife.app.wildlife.app.repository.ValidationRepository;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,92 +36,58 @@ public class InitialDataLoader {
     private AnimalTypeRepository animalTypeRepository;
     private ExistenceStatusRepository existenceStatusRepository;
     private FoodHabitTypeRepository foodHabitTypeRepository;
-    private CountryRepository countryRepository;
-    private StateRepository stateRepository;
+    private MenuItemRepository menuItemRepository;
+    private ValidationRepository validationRepository;
 
     private ObjectMapper objectMapper;
     private ResourceLoader resourceLoader;
 
-    private static final String COUNTRY_RESOURCE = "classpath:constant-table-data/country.json";
-    private static final String STATE_RESOURCE = "classpath:constant-table-data/state.json";
     private static final String ANIMAL_TYPE_RESOURCE = "classpath:constant-table-data/animal-type.json";
     private static final String FOOD_HABIT_TYPE_RESOURCE = "classpath:constant-table-data/food-type.json";
     private static final String EXISTENCE_STATUS_RESOURCE = "classpath:constant-table-data/existence-status.json";
+    private static final String MENU_ITEMS_RESOURCE = "classpath:constant-table-data/menu-item.json";
+    private static final String VALIDATION_MESSAGES_RESOURCE = "classpath:constant-table-data/validation.json";
 
-    @Bean
-    @Qualifier("animalTypes")
-    public List<AnimalType> animalTypes() {
-        return readOrSave(animalTypeRepository, ANIMAL_TYPE_RESOURCE, AnimalType.class);
+    @PostConstruct
+    public void loadAnimalTypes() {
+        readOrSave(animalTypeRepository, ANIMAL_TYPE_RESOURCE, AnimalType.class);
     }
 
-    @Bean
-    @Qualifier("foodHabitTypes")
-    public List<FoodHabitType> foodHabitType() {
-        return readOrSave(foodHabitTypeRepository, FOOD_HABIT_TYPE_RESOURCE, FoodHabitType.class);
+    @PostConstruct
+    public void loadFoodHabitType() {
+        readOrSave(foodHabitTypeRepository, FOOD_HABIT_TYPE_RESOURCE, FoodHabitType.class);
     }
 
-    @Bean
-    @Qualifier("existenceStatuses")
-    public List<ExistenceStatus> existenceStatuses() {
-        return readOrSave(existenceStatusRepository, EXISTENCE_STATUS_RESOURCE, ExistenceStatus.class);
+    @PostConstruct
+    public void loadExistenceStatuses() {
+        readOrSave(existenceStatusRepository, EXISTENCE_STATUS_RESOURCE, ExistenceStatus.class);
     }
 
-    @Bean
-    @Qualifier("countries")
-    @Profile("data-loader")
-    public List<Country> countriesFromJson() {
-        LOG.info("data-loader profile is active therefore loading Countries from JSON file.");
-
-        List<Country> countries = extract(COUNTRY_RESOURCE, Country.class)
-                .stream().filter(Country::isNotEmpty).collect(Collectors.toList());
-        LOG.info("Found {} countries in data file.", countries.size());
-
-        List<State> states = extract(STATE_RESOURCE, State.class)
-                .stream().filter(State::isNotEmpty).collect(Collectors.toList());
-        LOG.info("Found {} states in data file.", states.size());
-
-        countries.forEach(country -> country.setStates(states.stream()
-                .filter(state -> state.getCountryCode().equals(country.getCountryCode())).collect(Collectors.toList())));
-        return countryRepository.saveAll(countries);
+    @PostConstruct
+    public void loadMenuItems() {
+        readOrSave(menuItemRepository, MENU_ITEMS_RESOURCE, MenuItem.class);
     }
 
-    @Bean
-    @Qualifier("states")
-    @Profile("data-loader")
-    public List<State> statesFromJson() {
-        LOG.info("data-loader profile is active therefore loading States from JSON file.");
-        List<Country> countries = extract(COUNTRY_RESOURCE, Country.class)
-                .stream().filter(Country::isNotEmpty).collect(Collectors.toList());
-        LOG.info("Found {} countries in data file.", countries.size());
-
-        List<State> states = extract(STATE_RESOURCE, State.class)
-                .stream().filter(State::isNotEmpty).collect(Collectors.toList());
-        LOG.info("Found {} states in data file.", states.size());
-
-        countries.forEach(country -> country.setStates(states.stream()
-                .filter(state -> state.getCountryCode().equals(country.getCountryCode())).collect(Collectors.toList())));
-        List<Country> savedCountries = countryRepository.saveAll(countries);
-        List<State> allStates = new ArrayList<>();
-
-        savedCountries.forEach(country -> allStates.addAll(country.getStates()));
-
-        return allStates;
+    @PostConstruct
+    public void loadValidation() {
+        LOG.info("Loading validation messages...");
+        List<ValidForm> validForms = extract(VALIDATION_MESSAGES_RESOURCE, ValidForm.class);
+        validForms.forEach(this::shapeData);
+        LOG.info("Loaded {} validation messages from json", validForms.size());
+        validationRepository.saveAll(validForms);
     }
 
-    @Bean
-    @Qualifier("states")
-    @Profile("!data-loader")
-    public List<State> statesFromDB() {
-        LOG.info("data-loader profile is inactive therefore loading States from Database.");
-        return Collections.unmodifiableList(stateRepository.findAll());
-    }
-
-    @Bean
-    @Qualifier("countries")
-    @Profile("!data-loader")
-    public List<Country> countriesFromDB() {
-        LOG.info("data-loader profile is inactive therefore loading Countries from Database.");
-        return Collections.unmodifiableList(countryRepository.findAll());
+    private void shapeData(ValidForm validForm) {
+        validForm.getFormFields().forEach(formField -> {
+            formField.setFormFieldId(String.format("%s.%s", validForm.getFormName(),
+                    formField.getFormFieldName()));
+            formField.getValidationMessages().forEach(validationMessage -> {
+                validationMessage.setValidationMessageId(
+                        String.format("%s.%s.%s", validForm.getFormName(),
+                                formField.getFormFieldName(),
+                                validationMessage.getMessageKey()));
+            });
+        });
     }
 
     private <T> List<T> extract(String resourceLocation, Class<T> collectionType) {

@@ -1,0 +1,69 @@
+[
+  {
+    "formName": "tourForm",
+    "formFields" : [
+      {
+        "formFieldName" : "selectedLocation",
+        "validationMessages" : [
+          {
+            "messageKey" : "required",
+            "messageText": "Location name is required."
+          },
+          {
+            "messageKey" : "minlength",
+            "messageText": "Must contain at least 3 characters."
+          },
+          {
+            "messageKey" : "maxlength",
+            "messageText": "Can contain maximum 40 characters."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "formName": "addLocationForm",
+    "formFields" : [
+      {
+        "formFieldName" : "locationName",
+        "validationMessages" : [
+          {
+            "messageKey" : "required",
+            "messageText": "Location name is required."
+          },
+          {
+            "messageKey" : "minlength",
+            "messageText": "Must contain at least 3 characters."
+          },
+          {
+            "messageKey" : "maxlength",
+            "messageText": "Can contain maximum 40 characters."
+          },
+          {
+            "messageKey" : "duplicateLocationName",
+            "messageText": "This location is already added."
+          }
+        ]
+      },
+      {
+        "formFieldName" : "country",
+        "validationMessages" : [
+          {
+            "messageKey" : "required",
+            "messageText": "Please select a country."
+          }
+        ]
+      },
+      {
+        "formFieldName" : "state",
+        "validationMessages" : [
+          {
+            "messageKey" : "required",
+            "messageText": "Please select a state."
+          }
+        ]
+      }
+    ]
+  }
+]
+

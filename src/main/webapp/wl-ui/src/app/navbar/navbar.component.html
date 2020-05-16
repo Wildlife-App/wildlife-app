@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" routerLink="#">WebSiteName</a>
+    </div>
+    <ul class="nav navbar-nav float-right">
+      <ng-container *ngFor="let menu of menus">
+        <li *ngIf="menu.submenus && menu.submenus.length > 0" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" routerLink="#">{{menu.menuText}}
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li *ngFor="let submenu of menu.submenus"><a [routerLink]="submenu.link">{{submenu.menuText}}</a></li>
+          </ul>
+        </li>
+        <li *ngIf="!(menu.submenus && menu.submenus.length > 0)" routerLinkActive="active">
+          <a [routerLink]="menu.link" >{{menu.menuText}}</a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

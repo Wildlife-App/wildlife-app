@@ -1,0 +1,32 @@
+[
+  {
+    "menuItemId": "m1",
+    "menuText": "Home",
+    "link": "/home",
+    "allowedFor": "ALL"
+  },
+  {
+    "menuItemId": "m2",
+    "menuText": "Search",
+    "link": "/search",
+    "allowedFor": "ALL"
+  },
+  {
+    "menuItemId": "m3",
+    "menuText": "Locations",
+    "link": "#",
+    "allowedFor": "ALL"
+  },
+  {
+    "menuItemId": "m31",
+    "menuText": "New Tour",
+    "link": "/locations",
+    "allowedFor": "ALL"
+  },
+  {
+    "menuItemId": "m4",
+    "menuText": "Add",
+    "link": "/add",
+    "allowedFor": "ADMIN"
+  }
+]

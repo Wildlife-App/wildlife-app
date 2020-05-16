@@ -1,6 +1,6 @@
 package com.wildlife.app.wildlife.app.validators;
 
-import com.wildlife.app.wildlife.app.models.db.Animal;
+import com.wildlife.app.wildlife.app.models.Animal;
 import com.wildlife.app.wildlife.app.repository.AnimalRepository;
 import com.wildlife.app.wildlife.app.util.ErrorConstants;
 import lombok.AllArgsConstructor;
