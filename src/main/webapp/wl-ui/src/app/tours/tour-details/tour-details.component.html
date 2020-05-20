@@ -14,8 +14,8 @@
             <div class="col-sm-4">
               <table>
                 <tr>
-                  <td class="text-right padding-md">Start Date :</td>
-                  <td class="padding-md">{{tour.startDate | date}}</td>
+                  <td class="label-col text-right padding-md">Start Date :</td>
+                  <td class="data-col padding-md">{{tour.startDate | date}}</td>
                 </tr>
                 <tr>
                   <td class="text-right padding-md">End date :</td>
@@ -25,9 +25,13 @@
             </div>
           </div>
         </div>
-        <div class="panel-footer">
-            <a class="btn btn-primary btn-lg pull-right" routerLink="/home">Back to summary</a>
-            <div class="clearfix"></div>
+        <div class="panel-footer text-center">
+          <div class="btn-block">
+            <a class="btn btn-primary btn-lg" routerLink="/home" title="Back to summary page"><span class="fa fa-hand-o-left"></span>&nbsp;Back</a>
+            <a class="btn btn-primary btn-lg" title="Edit this tour" (click)="navigateToEditTour()">
+              <span class="fa fa-edit"></span>&nbsp;Edit</a>
+          </div>
+          <div class="clearfix"></div>
         </div>
       </div>
     </div>

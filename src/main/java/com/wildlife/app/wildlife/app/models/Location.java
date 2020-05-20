@@ -15,13 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = DBColumnConstants.TBL_LOCATION)
-public class Location implements Serializable, DBColumnConstants {
+public class Location implements Serializable, DBColumnConstants, Comparable<Location> {
     private static final long serialVersionUID = -5463229502452123L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,6 +38,14 @@ public class Location implements Serializable, DBColumnConstants {
 
     @Column(name = COL_TBL_LOCATION_AREA, length = 8, nullable = false)
     private Double area;
+
+    @Column(name = COL_TBL_CREATE_DT)
+    private Date createDate;
+
+    @Override
+    public int compareTo(Location o) {
+        return this.locationName.compareTo(o.locationName);
+    }
 
     public int getResourceId() {
         return this.locationId;

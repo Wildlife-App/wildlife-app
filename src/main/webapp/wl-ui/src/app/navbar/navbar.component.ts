@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from "../http.service";
-import {formatUrl} from "../app.component";
+import {HOME_URI, NEW_TOUR_LANDING_URI, WILDLIFE_URI} from "../app.constants";
 
 @Component({
   selector: 'app-navbar',
@@ -9,18 +8,17 @@ import {formatUrl} from "../app.component";
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private service: HttpService) {
+  constructor() {
   }
 
-  menus = [];
-
+  private menus = [];
 
   ngOnInit() {
     this.loadConstantMenu();
-
   }
-  loadFromService() {
-    this.service.getResource(formatUrl('/menus')).subscribe(data => {
+
+  /*private loadFromService() {
+    this.service.getResource(prepareUrl(['/menus'])).subscribe(data => {
       console.log('Menu items received: ', data);
       for (let item of data.content) {
         console.log('Pushing menu item ', item);
@@ -29,33 +27,24 @@ export class NavbarComponent implements OnInit {
     }, error => {
       console.log('Error while fetching menu', error);
     });
-  }
-  loadConstantMenu() {
+  }*/
+
+  private loadConstantMenu() {
     const locationMenu = {
-      menuText: 'Locations',
-      submenus: [
-        {
-          menuText: 'New Location',
-          link: '/locations'
-        },
-        {
-          menuText: 'Tour',
-          link: '/newtour'
-        }
-      ]
+      menuText: 'New Tour',
+      link: NEW_TOUR_LANDING_URI
     };
     const homeMenu = {
       menuText: 'Home',
-      link: '/home',
-    }
+      link: HOME_URI,
+    };
     const addMenu = {
-      menuText: 'Add',
-      link: '/add',
-    }
+      menuText: 'Wildlife',
+      link: WILDLIFE_URI,
+    };
 
     this.menus.push(homeMenu);
     this.menus.push(addMenu);
     this.menus.push(locationMenu);
   }
-
 }

@@ -22,7 +22,3 @@ export class AppComponent {
     });
   }
 }
-export const HOST = 'http://localhost:8090/wildlife/v1';
-export function formatUrl(url: string): string {
-  return HOST + url;
-}

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorUtils} from "../utils/validator-utils";
 import {HttpService} from "../http.service";
 import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
-import {formatUrl} from "../app.component";
+import {prepareUrl} from "../app.constants";
 
 @Component({
   selector: 'app-add-animal',
@@ -119,13 +119,13 @@ export class AddAnimalComponent implements OnInit {
   }
 
   fetchData(url: string, list: any[]) {
-    this.httpService.getResource(formatUrl(url)).subscribe(data => {
+    this.httpService.getResource(prepareUrl([url])).subscribe(data => {
       console.log('Fetched data', data);
       for (let a of data.content) {
         list.push(a);
       }
     }, error => {
-      console.log('')
+      console.log('error', error);
     });
   }
 
@@ -157,18 +157,18 @@ export class AddAnimalComponent implements OnInit {
       firstSpottingDate: this.animalForm.get('spottingDate').value
     };
     console.log('Posting data', animal);
-    this.httpService.postResource(formatUrl('/animals'), animal).subscribe(data => {
+    this.httpService.postResource(prepareUrl(['/animals']), animal).subscribe(data => {
       console.log('Saved animal', data);
     }, error => {
       console.log('Error occurred', error);
     })
   }
 
-  addOtherNameField() {
+  /*addOtherNameField() {
     (<FormArray>this.animalForm.get('animalOtherNames')).push(this.newOtherName());
   }
 
   removeName(id: number) {
     (<FormArray>this.animalForm.get('animalOtherNames')).removeAt(id);
-  }
+  }*/
 }

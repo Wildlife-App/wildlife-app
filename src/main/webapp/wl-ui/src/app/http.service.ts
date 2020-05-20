@@ -19,4 +19,9 @@ export class HttpService {
     console.log('Posting data to ', url);
     return this.http.post(url, data);
   }
+
+  putResource(url: string, data: any): Observable<any> {
+    console.log('Putting data to ', url);
+    return this.http.put(url, data);
+  }
 }

@@ -35,6 +35,10 @@ public interface DBColumnConstants {
     String COL_TBL_LOCATION_ID = "LOCATION_ID";
     String COL_TBL_LOCATION_NAME = "LOCATION_NAME";
     String COL_TBL_LOCATION_AREA = "LOCATION_AREA";
+    String COL_TBL_TOUR_SAFARIS_NO = "safaris_no";
+
+    String COL_TBL_CREATE_DT = "create_dt";
+    String COL_TBL_CREATED_BY = "created_by";
 
     String COL_TBL_ANIMAL_ID = "ANIMAL_ID";
     String COL_TBL_ANIMAL_NAME = "ANIMAL_NAME";

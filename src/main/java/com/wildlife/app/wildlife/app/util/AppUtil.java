@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
@@ -21,10 +20,6 @@ public final class AppUtil {
 
     public static <E, R> Collection<R> toCollection(Collection<E> items, Function<? super E, R> function) {
         return items.stream().map(function).collect(Collectors.toList());
-    }
-
-    public static String getCurrentDateAsString() {
-        return DATE_FORMATTER.format(new Date());
     }
 
     public static long generateId() {

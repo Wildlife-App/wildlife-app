@@ -7,7 +7,7 @@ import {StateModel} from "../models/state.model";
 import {CountryModel} from "../models/country.model";
 import {LocationModel} from "../models/location.model";
 import {DisplayMessageModel} from "../models/display.message.model";
-import {formatUrl} from "../app.component";
+import {NEW_TOUR_EXISTING_LOCATION_URI, NEW_TOUR_LANDING_URI, prepareUrl} from "../app.constants";
 
 let httpServiceInject: HttpService;
 
@@ -56,7 +56,6 @@ export class LocationComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.fetchValidationMessages();
     this.buildForm();
     this.fetchCountries();
 
@@ -88,7 +87,7 @@ export class LocationComponent implements OnInit {
   fetchCountries() {
     this.countries.length = 0;
     this.states.length = 0;
-    this.httpService.getResource(formatUrl('/countries')).subscribe(data => {
+    this.httpService.getResource(prepareUrl(['/countries'])).subscribe(data => {
       const allCountries: CountryModel[] = data.content;
 
       console.log('Fetched countries', allCountries);
@@ -126,21 +125,12 @@ export class LocationComponent implements OnInit {
     this.postData(location);
   }
 
-  fetchValidationMessages(): void {
-    this.httpService.getResource(formatUrl('/validations/addLocationForm')).subscribe(data => {
-      console.log('Fetched validation messages', data);
-      for (let formField in data.formFields) {
-        const fieldValidation = {};
-      }
-    });
-  }
-
   postData(location: LocationModel): void {
     console.log('Posting location: ', location);
-    this.httpService.postResource(formatUrl('/locations'), location).subscribe(
+    this.httpService.postResource(prepareUrl(['/locations']), location).subscribe(
       data => {
         console.log('location saved', data);
-        console.log('Resetting form.')
+        console.log('Resetting form.');
         this.resetLocationForm();
         this.displayMessage.newInfoMessage('Location added successfully, navigating to the next page.');
         this.navigate(+data.resourceId);
@@ -160,7 +150,9 @@ export class LocationComponent implements OnInit {
 
   navigate(resourceId: number) {
     setTimeout(() => {
-        this.router.navigate(['/newtour', 'existing'], {'queryParams': {'resourceId': resourceId}});
+        this.router.navigate([NEW_TOUR_LANDING_URI, NEW_TOUR_EXISTING_LOCATION_URI],
+          {'queryParams': {'resourceId': resourceId}})
+          .finally();
       },
       3000);
   }

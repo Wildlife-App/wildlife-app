@@ -313,6 +313,15 @@ div.title h1 {
   font-size: 16px !important;
 }
 
+.error {
+  color: red !important;
+}
+
+body {
+  /*background-color: rgba(75, 155, 180, 0.27);*/
+  background-color: rgba(32, 32, 32, 0.81);
+}
+
 /*Screen resolution upto 1920px or 1080p*/
 @media screen and (max-width: 1920px) {
   .form-section {
@@ -341,17 +350,3 @@ div.title h1 {
   }
 }
 
-body {
-  /*background-color: rgba(75, 155, 180, 0.27);*/
-  background-color: rgba(32, 32, 32, 0.81);
-}
-
-.navbar-blue {
-  background-color: #337ab7;
-  border-color: #337ab7;
-  color: white;
-}
-
-.error {
-  color: red!important;
-}

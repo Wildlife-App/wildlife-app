@@ -6,14 +6,14 @@
   <div class="row place-input font-lg">
     <div class="col-sm-4"></div>
     <div class="col-sm-6">
-      <ul class="nav nav-pills" role="tablist">
+      <ul class="nav nav-pills place-options" role="tablist">
         <li routerLinkActive="active">
-          <a class="place-select" routerLink="existing">
+          <a class="place-select" [routerLink]="existingLocationURI">
             <span class="glyphicon glyphicon-globe"></span> I went to a place I already visited
           </a>
         </li>
         <li routerLinkActive="active" style="margin-left: 20px;">
-          <a class="place-select" routerLink="newlocation">
+          <a class="place-select" [routerLink]="newLocationURI">
             <span class="glyphicon glyphicon-globe"></span> I went to a new place
           </a>
         </li>

@@ -1,0 +1,10 @@
+.action > a:hover {
+  cursor: pointer;
+}
+
+.label-col {
+  width: 400px;
+}
+.data-col {
+  width: 600px;
+}

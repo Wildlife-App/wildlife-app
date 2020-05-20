@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../http.service";
-import {Animal} from "../models/animal";
 import {TourModel} from "../models/tour.model";
 import {LinkModel} from "../models/link.model";
-import {formatUrl} from "../app.component";
 import {PageModel} from "../models/page.model";
+import {prepareUrl} from "../app.constants";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-summary',
@@ -12,11 +12,14 @@ import {PageModel} from "../models/page.model";
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
+  private sortForm: FormGroup;
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService,
+              private formBuilder: FormBuilder) {
   }
 
   private tours: TourModel[] = [];
+
   private recordPerPage: number = 3;
   private prevLinkUrl: string = '#';
   private nextLinkUrl: string = '#';
@@ -26,13 +29,27 @@ export class SummaryComponent implements OnInit {
   private totalRecords: number = 0;
 
   ngOnInit() {
-    const url: string = '/tours?page=' + this.currentPage + '&size=' + this.recordPerPage;
+    this.sortForm = this.formBuilder.group({
+      sortBy: [''],
+      sortType: ['']
+    });
 
-    setTimeout(() => {
-        this.loadData(formatUrl(url));
-      },
-      3000);
+    this.sortForm.get('sortBy').setValue('location');
+    this.sortForm.get('sortType').setValue('asc');
 
+    this.loadSortedData();
+  }
+
+  private loadSortedData(): void {
+    const sortBy = this.sortForm.get('sortBy').value;
+    const sortType = this.sortForm.get('sortType').value;
+    const url: string = prepareUrl(['/tours'],
+      [
+        {'page': this.currentPage},
+        {'size': this.recordPerPage},
+        {'sort': sortBy + ',' + sortType}
+      ]);
+    this.loadData(url);
   }
 
   next() {
@@ -51,26 +68,28 @@ export class SummaryComponent implements OnInit {
 
   private loadData(url: string) {
     this.httpService.getResource(url).subscribe(data => {
-      this.tours.length = 0;
-      console.log('Tours fetched', data);
-      for (let item of <TourModel[]>data.content) {
-        if (item && item.resourceId && item.resourceId > 0) {
-          this.tours.push(TourModel.fromDataForView(item));
+        this.tours.length = 0;
+        console.log('Tours fetched', data);
+        for (let item of <TourModel[]>data.content) {
+          if (item && item.resourceId && item.resourceId > 0) {
+            this.tours.push(TourModel.fromDataForView(item));
+          }
         }
-      }
-      const links: LinkModel[] = <LinkModel[]>data.links;
-      this.setLinks(links);
+        const links: LinkModel[] = <LinkModel[]>data.links;
+        this.setLinks(links);
 
-      console.log('data.page: ', data.page);
-      const page: PageModel = PageModel.fromPageObject(data.page);
-      console.log('parsed page: ', page);
-      this.setPages(page);
-      console.log('this.prevLinkUrl:', this.prevLinkUrl);
-      console.log('this.nextLinkUrl:', this.nextLinkUrl);
-      console.log('Printing tours: ', this.tours);
-    }, error => {
-      console.log('Error fetching tour records.', error);
-    });
+        console.log('data.page: ', data.page);
+        const page: PageModel = PageModel.fromPageObject(data.page);
+        console.log('parsed page: ', page);
+        this.setPages(page);
+        console.log('this.prevLinkUrl:', this.prevLinkUrl);
+        console.log('this.nextLinkUrl:', this.nextLinkUrl);
+        console.log('Printing tours: ', this.tours);
+      }, error => {
+        console.log('Error fetching tour records.', error);
+      },
+      () => {
+      });
   }
 
   private setPages(page: PageModel): void {

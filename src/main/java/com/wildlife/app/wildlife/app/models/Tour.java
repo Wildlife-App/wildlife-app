@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = DBColumnConstants.TBL_TOUR)
@@ -32,4 +32,11 @@ public class Tour implements Serializable, DBColumnConstants {
     @OneToOne
     @JoinColumn(name = COL_TBL_LOCATION_ID, referencedColumnName = COL_TBL_LOCATION_ID, nullable = false)
     private Location location;
+
+    @Column(name = COL_TBL_TOUR_SAFARIS_NO)
+    private int safaris;
+
+    @Column(name = COL_TBL_CREATE_DT)
+    private Date createDate;
+
 }

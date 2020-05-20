@@ -35,7 +35,7 @@
     </div>
     <!-- Row 1 complete -->
     <div [formGroup]="tourForm.get('tourDuration')">
-      <div class="row form-group" [ngClass]="{'has-error': formErrors.fromDate || formErrors.tourDuration}">
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.fromDate || formErrors.tourDuration || formErrors.startDate}">
         <div class="col-sm-3 text-right">
           <label for="fromDate" class="control-label form-label">Tour Start Date<sup class="required">*</sup></label>
         </div>
@@ -49,13 +49,13 @@
           </div>
         </div>
         <div class="col-sm-3">
-        <span *ngIf="formErrors.fromDate">
-          <small class="pull-right required margin-top-md">{{formErrors.fromDate}}</small>
+        <span *ngIf="formErrors.fromDate || formErrors.startDate">
+          <small class="pull-right required margin-top-md">{{formErrors.fromDate ? formErrors.fromDate : formErrors.startDate}}</small>
         </span>
         </div>
       </div>
       <!-- From date complete -->
-      <div class="row form-group" [ngClass]="{'has-error': formErrors.toDate || formErrors.tourDuration}">
+      <div class="row form-group" [ngClass]="{'has-error': formErrors.toDate || formErrors.tourDuration || formErrors.endDate}">
         <div class="col-sm-3 text-right">
           <label for="toDate" class="control-label form-label">Tour End Date<sup class="required">*</sup></label>
         </div>
@@ -69,27 +69,47 @@
           </div>
         </div>
         <div class="col-sm-3">
-        <span *ngIf="formErrors.toDate || formErrors.tourDuration">
+        <span *ngIf="formErrors.toDate || formErrors.tourDuration || formErrors.endDate">
           <small class="pull-right required margin-top-md">
-            {{formErrors.toDate ? formErrors.toDate : formErrors.tourDuration}}
+            {{formErrors.toDate ? formErrors.toDate : formErrors.endDate}}
           </small>
         </span>
         </div>
       </div>
     </div>
     <!-- TO date complete-->
+    <!-- Safari count -->
+    <div class="row form-group" [ngClass]="{'has-error': formErrors.safaris}">
+      <div class="col-sm-3 text-right">
+        <label for="safaris" class="control-label form-label">Safaris Completed</label>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-car"></i></span>
 
+          <input type="number" class="form-control input-lg background-white" id="safaris" formControlName="safaris"
+                  (blur)="validateTourForm()">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <span *ngIf="formErrors.safaris">
+          <small class="pull-right required margin-top-md">{{formErrors.safaris}}</small>
+        </span>
+      </div>
+    </div>
     <br>
     <div class="btn-group btn-group-lg float-right" style="margin-top: 20px">
       <button class="btn btn-lg btn-default" (click)="resetForm()"
               [attr.disabled] = "tourForm.pristine ? 'disabled' :null">
         <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
       </button>
+      &nbsp; &nbsp;
       <button class="btn btn-lg btn-primary" (click)="validateTourForm(); saveTour();"
               [attr.disabled] = "!isSubmittable ? 'true' :null">
-        <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
+        <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;{{isEditing ? 'Update' : 'Save'}}
       </button>
     </div>
     <br><br>
   </div>
 </div>
+<app-form-tester [form]="tourForm"></app-form-tester>

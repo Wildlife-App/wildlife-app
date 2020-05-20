@@ -10,3 +10,11 @@
   border: 1px solid white;
   border-radius: 20px;
 }
+
+@media screen and (max-height: 1080px) {
+  .image-back {
+    width: 65%;
+    min-height: 650px;
+    max-height: 1100px;
+  }
+}

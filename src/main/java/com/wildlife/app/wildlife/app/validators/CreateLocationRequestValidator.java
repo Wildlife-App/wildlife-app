@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.sql.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component("beforeCreateCreateLocationRequestValidator")
@@ -32,6 +33,9 @@ public class CreateLocationRequestValidator implements Validator, ErrorConstants
     public void validate(Object o, Errors errors) {
         LOG.info("Validating location before adding...");
         Location location = (Location) o;
+
+        location.setCreateDate(new Date(System.currentTimeMillis()));
+
         String locationName = location.getLocationName();
 
         if (StringUtils.isEmpty(locationName)) {
