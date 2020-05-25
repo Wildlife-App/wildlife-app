@@ -2,7 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {TourModel} from "../../models/tour.model";
 import {HttpService} from "../../http.service";
-import {NEW_TOUR_EXISTING_LOCATION_URI, NEW_TOUR_LANDING_URI, prepareUrl, TOUR_EXCERPT} from "../../app.constants";
+import {
+  FROM_ROOT,
+  NEW_TOUR_EXISTING_LOCATION_URI,
+  NEW_TOUR_LANDING_URI,
+  prepareUrl,
+  TOUR_EXCERPT, WILDLIFE_URI
+} from "../../app.constants";
 
 @Component({
   selector: 'app-tour-details',
@@ -10,6 +16,9 @@ import {NEW_TOUR_EXISTING_LOCATION_URI, NEW_TOUR_LANDING_URI, prepareUrl, TOUR_E
   styleUrls: ['./tour-details.component.css']
 })
 export class TourDetailsComponent implements OnInit {
+  readonly uriFromRoot: string = FROM_ROOT;
+  readonly uriWildlife: string = WILDLIFE_URI;
+
   private tour: TourModel = TourModel.empty();
   private currentTourId: number = -1;
 
@@ -43,6 +52,12 @@ export class TourDetailsComponent implements OnInit {
   private navigateToEditTour() {
     this.router.navigate([NEW_TOUR_LANDING_URI, NEW_TOUR_EXISTING_LOCATION_URI],
       {queryParams: {'editing' : this.tour.resourceId}})
+      .finally();
+  }
+
+  private navigateToAddAnimal() {
+    this.router.navigate([this.uriFromRoot, this.uriWildlife],
+      {'queryParams': {'tourId': this.tour.resourceId}})
       .finally();
   }
 }

@@ -1,185 +1,184 @@
-<div class="card form-section position-center">
-  <div class="add-location-div standard-padding-sm"
-       style="background-image: url('assets/images/wildlife-panorama.jpg'); background-size: 100%; background-size: cover;">
-    <div class="title">
-      <h1 class="text-center">Add an Animal</h1>
-    </div>
-  </div>
-  <div [formGroup]="animalForm" class="standard-padding">
-    <!-- Row 1 : Animal Name-->
-    <div class="row form-group" [ngClass]="{'has-error': formErrors.animalName}">
-      <div class="col-sm-3 text-right">
-        <label for="animalName" class="control-label">Animal Name<sup class="required">*</sup></label>
+<div class="container-fluid">
+  <div class="center-block animal-card">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h2>{{formTitleText}}</h2>
       </div>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-          <input class="form-control input-lg background-white" id="animalName" formControlName="animalName"
-                 (blur)="validateForm(animalForm)">
+      <div class="panel-body font-md">
+        <div [formGroup]="animalForm" class="standard-padding">
+          <!-- Row 1 : Animal Name-->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.animalName}">
+            <div class="col-sm-3 text-right">
+              <label for="animalName" class="control-label">Animal Name<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <input class="form-control input-lg background-white" id="animalName" formControlName="animalName"
+                       placeholder="Name of the animal"
+                       (blur)="validateForm(animalForm)">
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.animalName">
+                <small class="float-right required">{{formErrors.animalName}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 1 complete -->
+
+          <!-- Row 2 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.scientificName}">
+            <div class="col-sm-3 text-right">
+              <label for="scientificName" class="control-label">Scientific Name<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <input class="form-control input-lg background-white" id="scientificName"
+                       formControlName="scientificName"
+                       placeholder="Scientific name of the animal"
+                       (blur)="validateForm(animalForm)">
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.scientificName">
+                <small class="float-right required">{{formErrors.scientificName}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 2 complete -->
+          <!-- Row 3 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.gender}">
+            <div class="col-sm-3 text-right">
+              <label for="gender" class="control-label">Gender<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <select class="form-control input-lg background-white" id="gender" formControlName="gender"
+                        [ngClass]="resolveClass('gender')">
+                  <option value="">--Select One--</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="YOUNG">Young</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.gender">
+                <small class="float-right required">{{formErrors.gender}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 3 Complete -->
+          <!-- Row 4 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.animalType}">
+            <div class="col-sm-3 text-right">
+              <label for="animalType" class="control-label">Animal Type<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <select class="form-control input-lg background-white" id="animalType"
+                        [ngClass]="resolveClass('animalType')" formControlName="animalType">
+                  <option value="">--Select One--</option>
+                  <option *ngFor="let animalType of animalTypeList"
+                          [value]="animalType.getSelfLink()">{{animalType.animalTypeName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.animalType">
+                <small class="float-right required">{{formErrors.animalType}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 4 Complete -->
+          <!-- Row 5 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.foodHabit}">
+            <div class="col-sm-3 text-right">
+              <label for="foodHabit" class="control-label">Food Habit<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <select class="form-control input-lg background-white" id="foodHabit"
+                        [ngClass]="resolveClass('foodHabit')" formControlName="foodHabit">
+                  <option value="">--Select One--</option>
+                  <option *ngFor="let foodHabit of foodHabitList"
+                          [value]="foodHabit.getSelfLink()">{{foodHabit.foodHabitType}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.foodHabit">
+                <small class="float-right required">{{formErrors.foodHabit}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 5 Complete -->
+          <!-- Row 6 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.existenceStatus}">
+            <div class="col-sm-3 text-right">
+              <label for="existenceStatus" class="control-label">Existence Status<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <select class="form-control input-lg background-white" id="existenceStatus"
+                        [ngClass]="resolveClass('existenceStatus')" formControlName="existenceStatus">
+                  <option value="" class="placeholder-option">--Select One--</option>
+                  <option *ngFor="let existenceStatus of existenceStatusList" [value]="existenceStatus.getSelfLink()">
+                    {{existenceStatus.existenceStatus}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.existenceStatus">
+                <small class="float-right required">{{formErrors.existenceStatus}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 6 Complete -->
+          <!-- Row 7 Start -->
+          <div class="row form-group" [ngClass]="{'has-error': formErrors.imageLink}">
+            <div class="col-sm-3 text-right">
+              <label for="resourceImage" class="control-label">Link An Image<sup class="required">*</sup></label>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group cust">
+                <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
+                <input type="file" hidden class="form-control input-lg background-white" id="resourceImage"
+                       formControlName="imageLink"
+                       placeholder="Link an image"
+                       (blur)="validateForm(animalForm)">
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <span *ngIf="formErrors.imageLink">
+                <small class="float-right required">{{formErrors.imageLink}}</small>
+              </span>
+            </div>
+          </div>
+          <!-- Row 7 Complete -->
         </div>
       </div>
-      <div class="col-sm-3">
-        <span *ngIf="formErrors.animalName">
-          <small class="float-right required">{{formErrors.animalName}}</small>
-        </span>
-      </div>
-    </div>
-    <!-- Row 1 complete -->
-    <div class="row form-group" [ngClass]="{'has-error': formErrors.scientificName}">
-      <div class="col-sm-3 text-right">
-        <label for="scientificName" class="control-label">Scientific Name<sup class="required">*</sup></label>
-      </div>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-          <input class="form-control input-lg background-white" id="scientificName" formControlName="scientificName"
-                 (blur)="validateForm(animalForm)">
+      <div class="panel-footer text-center">
+        <div class="btn-group">
+          <a class="btn btn-lg btn-default" (click)="resetForm()"
+             [attr.disabled]="animalForm.pristine ? 'disabled' : null">
+            <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
+          </a>
+          <a class="btn btn-lg btn-primary" (click)="saveAnimal()"
+             [attr.disabled]="animalForm.pristine || !animalForm.valid ? 'disabled' : null">
+            <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
+          </a>
         </div>
-      </div>
-      <div class="col-sm-3">
-        <span *ngIf="formErrors.scientificName">
-          <small class="float-right required">{{formErrors.scientificName}}</small>
-        </span>
-      </div>
-    </div>
-    <div class="row" [ngClass]="{'has-error': formErrors.spottingDate}">
-      <div class="col-sm-3 text-right">
-        <label for="spottingDate" class="control-label">Spotting Date<sup class="required">*</sup></label>
-      </div>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-calendar font-x-lg"></i></span>
-          <input type="text" class="form-control input-lg background-white"
-                 bsDatepicker [bsConfig]="datePickerConfig"
-                 id="spottingDate" formControlName="spottingDate" #spottingDate [readOnly]="spottingDate.onfocus">
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <span *ngIf="formErrors.spottingDate">
-          <small class="float-right required">{{formErrors.spottingDate}}</small>
-        </span>
-      </div>
-    </div>
-
-    <br>
-
-    <div class="row" [formGroup]="animalForm.get('animalHabitGroup')">
-      <div class="col-sm-5">
-        <div class="row form-group" [ngClass]="{'has-error': formErrors.gender}">
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8">
-            <label for="gender" class="control-label">Animal Gender<sup class="required">*</sup></label>
-          </div>
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8 input-group">
-            <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-            <select class="form-control input-lg background-white" id="gender" formControlName="gender">
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="YOUNG">Young</option>
-            </select>
-          </div>
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8 help-block">
-            <span *ngIf="formErrors.gender">
-              <small class="float-left required">{{formErrors.gender}}</small>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-1"></div>
-      <div class="col-sm-5">
-        <div class="row form-group" [ngClass]="{'has-error': formErrors.animalType}">
-          <div class="col-sm-8">
-            <label for="animalType" class="control-label">Animal Type<sup class="required">*</sup></label>
-          </div>
-          <div class="col-sm-4"></div>
-
-          <div class="col-sm-8 input-group">
-            <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-            <select class="form-control input-lg background-white" id="animalType" formControlName="animalType">
-              <option *ngFor="let animalType of animalTypeList"
-                      [value]="animalType.links[0].href">{{animalType.animalTypeName}}</option>
-            </select>
-          </div>
-          <div class="col-sm-4"></div>
-
-          <div class="col-sm-8 help-block float-left">
-            <span *ngIf="formErrors.animalType">
-                <small class="required">{{formErrors.animalType}}</small>
-            </span>
-          </div>
-          <div class="col-sm-4"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Row 2 complete -->
-
-    <div class="row" [formGroup]="animalForm.get('animalHabitGroup')">
-      <div class="col-sm-5">
-        <div class="row form-group" [ngClass]="{'has-error': formErrors.foodHabit}">
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8">
-            <label for="foodHabit" class="control-label">Food Habit<sup class="required">*</sup></label>
-          </div>
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8 input-group">
-            <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-            <select class="form-control input-lg background-white" id="foodHabit" formControlName="foodHabit">
-              <option *ngFor="let foodHabit of foodHabitList"
-                      [value]="foodHabit.links[0].href">{{foodHabit.foodHabitType}}</option>
-            </select>
-          </div>
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8 help-block">
-            <span *ngIf="formErrors.foodHabit">
-              <small class="float-left required">{{formErrors.foodHabit}}</small>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-1"></div>
-      <div class="col-sm-5">
-        <div class="row form-group" [ngClass]="{'has-error': formErrors.existenceStatus}">
-          <div class="col-sm-8">
-            <label for="existenceStatus" class="control-label">Existence Status<sup class="required">*</sup></label>
-          </div>
-          <div class="col-sm-4"></div>
-
-          <div class="col-sm-8 input-group">
-            <span class="input-group-addon"><i class="fa fa-user-o font-x-lg"></i></span>
-            <select class="form-control input-lg background-white" id="existenceStatus"
-                    formControlName="existenceStatus">
-              <option *ngFor="let existenceStatus of existenceStatusList" [value]="existenceStatus.links[0].href">
-                {{existenceStatus.existenceStatus}}
-              </option>
-            </select>
-          </div>
-          <div class="col-sm-4"></div>
-
-          <div class="col-sm-8 help-block float-left">
-            <span *ngIf="formErrors.existenceStatus">
-              <small class="required">{{formErrors.existenceStatus}}</small>
-            </span>
-          </div>
-          <div class="col-sm-4"></div>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <div class="row">
-      <div class="col-sm-7">
-        <br><br><br>
-      </div>
-      <div class="col-sm-4 btn-group btn-group-lg ">
-        <button class="btn btn-lg btn-default" (click)="animalForm.reset()">
-          <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
-        </button>
-        <button class="btn btn-lg btn-primary" (click)="saveAnimal()">
-          <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
-        </button>
+        <div class="clearfix"></div>
       </div>
     </div>
   </div>
 </div>
+<app-form-tester [form]="animalForm"></app-form-tester>

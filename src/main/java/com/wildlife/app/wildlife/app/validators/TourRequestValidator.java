@@ -15,10 +15,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Component("beforeCreateCreateTourRequestValidator")
+@Component
 @AllArgsConstructor
-public class CreateTourRequestValidator implements Validator, ErrorConstants {
-    private static final Logger LOG = LoggerFactory.getLogger(CreateTourRequestValidator.class);
+public class TourRequestValidator implements Validator, ErrorConstants {
+    private static final Logger LOG = LoggerFactory.getLogger(TourRequestValidator.class);
     private TourRepository tourRepository;
 
     @Override
@@ -34,17 +34,22 @@ public class CreateTourRequestValidator implements Validator, ErrorConstants {
         tour.setCreateDate(new Date(System.currentTimeMillis()));
 
         List<Tour> allTours = tourRepository.findAll();
+
         allTours.forEach(anotherTour -> validateDateOverlaps(tour, anotherTour, errors));
+
+        if (tour.getStartDate().after(tour.getEndDate())) {
+            checkAndThrow(errors, "startDate", START_DATE_AFTER_END_DATE, "Start date cannot be later than end date");
+        }
 
         int safaris = tour.getSafaris();
 
         if (safaris < 0) {
-            checkAndThrow(errors, "safaris", SAFARIS_MORE_THAN_POSSIBLE, "Safari count cannot be negative.");
+            checkAndThrow(errors, "safaris", NEGATIVE_SAFARI_COUNT, "Safari count cannot be negative.");
         }
 
         if (safaris > 0) {
             long diff = tour.getEndDate().getTime() - tour.getStartDate().getTime();
-            long inBetweenDays = TimeUnit.DAYS.convert(diff, TimeUnit.DAYS) + 1;
+            long inBetweenDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 2;
             int maxPossibleSafaris = (int) (inBetweenDays * 2);
 
             if (safaris > maxPossibleSafaris) {
@@ -63,6 +68,10 @@ public class CreateTourRequestValidator implements Validator, ErrorConstants {
 
 
     private void validateDateOverlaps(Tour oneTour, Tour anotherTour, Errors errors) {
+        if(oneTour.equals(anotherTour)) {
+            LOG.info("Same tours");
+            return;
+        }
         // Start date of oneTour falls in between anotherTour
         if (oneTour.getStartDate().equals(anotherTour.getStartDate()) ||
                 oneTour.getStartDate().equals(anotherTour.getEndDate())) {

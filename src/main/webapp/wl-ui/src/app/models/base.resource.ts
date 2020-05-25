@@ -13,6 +13,9 @@ export class BaseResource {
   }
 
   fromLinks(fromLinks: LinkModel[]): LinkModel[] {
+    if (!fromLinks) {
+      return [];
+    }
     const links: LinkModel[] = [];
     fromLinks.forEach(fromLink => links.push(LinkModel.fromLink(fromLink)));
     return links;

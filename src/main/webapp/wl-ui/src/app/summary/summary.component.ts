@@ -3,7 +3,7 @@ import {HttpService} from "../http.service";
 import {TourModel} from "../models/tour.model";
 import {LinkModel} from "../models/link.model";
 import {PageModel} from "../models/page.model";
-import {prepareUrl} from "../app.constants";
+import {FROM_ROOT, NEW_TOUR_LANDING_URI, prepareUrl, TOUR_DETAILS_URI, TOUR_URI} from "../app.constants";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
@@ -12,6 +12,9 @@ import {FormBuilder, FormGroup} from "@angular/forms";
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
+  readonly uriFromRoot: string = FROM_ROOT;
+  readonly uriTour: string = TOUR_URI;
+
   private sortForm: FormGroup;
 
   constructor(private httpService: HttpService,
@@ -19,7 +22,7 @@ export class SummaryComponent implements OnInit {
   }
 
   private tours: TourModel[] = [];
-
+  private addTourIrl: string = '/' + NEW_TOUR_LANDING_URI;
   private recordPerPage: number = 3;
   private prevLinkUrl: string = '#';
   private nextLinkUrl: string = '#';

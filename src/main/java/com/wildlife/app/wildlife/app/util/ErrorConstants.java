@@ -24,7 +24,8 @@ public interface ErrorConstants {
     String INVALID_STATE = "1015";
     String NEGATIVE_AREA = "1016";
     String OVERLAPPING_TOUR_DATES = "1017";
-    String NEGATIVE_SAFARI_COUNT = "1018";
-    String SAFARIS_MORE_THAN_POSSIBLE = "1019";
+    String START_DATE_AFTER_END_DATE = "1018";
+    String NEGATIVE_SAFARI_COUNT = "1019";
+    String SAFARIS_MORE_THAN_POSSIBLE = "1020";
 
 }

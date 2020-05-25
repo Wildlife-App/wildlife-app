@@ -69,6 +69,10 @@ public class Animal implements Serializable, DBColumnConstants {
     @JoinColumn(name = COL_TBL_ANIMAL_ID, referencedColumnName = COL_TBL_ANIMAL_ID)
     private Set<AnimalOtherName> animalOtherNames;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "related_resource_id", referencedColumnName = COL_TBL_ANIMAL_ID)
+    private Set<ResourceImage> resourceImages;
+
     @Column(name = COL_TBL_ANIMAL_FIRST_SPOTTING_DATE, updatable = false, nullable = false, length = 50)
     private Date firstSpottingDate;
 

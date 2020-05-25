@@ -1,0 +1,16 @@
+.animal-card {
+  width: 1250px;
+  margin-top: 80px;
+}
+
+.title {
+  width: 999px;
+}
+
+.text {
+  color: #555555;
+}
+
+.placeholder-text {
+  color: darkgray;
+}

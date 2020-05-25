@@ -2,6 +2,7 @@ package com.wildlife.app.wildlife.app.models;
 
 import com.wildlife.app.wildlife.app.models.constants.DBColumnConstants;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import java.sql.Date;
 @Entity
 @Table(name = DBColumnConstants.TBL_TOUR)
 @Data
+@EqualsAndHashCode(of = {"tourId"})
 public class Tour implements Serializable, DBColumnConstants {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

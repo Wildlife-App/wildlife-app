@@ -1,8 +1,10 @@
 import {LocationModel} from "./location.model";
 import {BaseResource} from "./base.resource";
+import {equalDates} from "../app.constants";
+import {ContentModel} from "./content.model";
 
 export class TourModel extends BaseResource {
-  constructor(startDate: Date, endDate: Date, location: any, resourceId?: number, tourId?: number, safaris?: number) {
+  constructor(startDate: Date, endDate: Date, location: LocationModel | string, resourceId?: number, tourId?: number, safaris?: number) {
     super();
     this.resourceId = resourceId;
     this.tourId = tourId;
@@ -16,8 +18,9 @@ export class TourModel extends BaseResource {
   tourId?: number;
   startDate: Date;
   endDate: Date;
-  location: any;
+  location: LocationModel | string;
   safaris: number;
+  content: ContentModel<LocationModel>[];
   private _isEmpty: boolean = false;
 
   private empty(): TourModel {
@@ -25,36 +28,33 @@ export class TourModel extends BaseResource {
     return this;
   }
 
-  isEmpty(): boolean {
-    return this._isEmpty;
-  }
-
-  static fromData(data: TourModel): TourModel {
-    const tour: TourModel = new TourModel(data.startDate, data.endDate,
-      LocationModel.fromData(data.location).getSelfLink(),
-      data.resourceId, data.resourceId);
-    tour.links = tour.fromLinks(data.links);
-    return tour;
+  equals(anotherTour: TourModel): boolean {
+    console.log('Comparing tours - ' +
+      'this.startDate === anotherTour.startDate = ' + (equalDates(this.startDate, anotherTour.startDate))
+      + ' this.endDate === anotherTour.endDate = ' + (equalDates(this.endDate, anotherTour.endDate))
+      + ' this.safaris === anotherTour.safaris = ' + (this.safaris === anotherTour.safaris));
+    return anotherTour
+      && equalDates(this.startDate, anotherTour.startDate)
+      && equalDates(this.endDate, anotherTour.endDate)
+      && this.safaris === anotherTour.safaris;
   }
 
   static fromDataForView(data: TourModel): TourModel {
     console.log('Received data for converting to Tour Model', data);
+    let location: LocationModel;
+
+    if (data.location) {
+      location = <LocationModel>data.location;
+    } else if (data.content && data.content.length > 0 && data.content[0].rel === 'location') {
+      location = data.content[0].value;
+    }
+
     const tour: TourModel = new TourModel(data.startDate, data.endDate,
-      LocationModel.fromData(data.location),
+      LocationModel.fromData(location),
       data.resourceId, data.resourceId, data.safaris);
 
     tour.links = tour.fromLinks(data.links);
     return tour;
-  }
-
-  static copy(from: TourModel, to: TourModel): void {
-    to.resourceId = from.resourceId;
-    to.tourId = from.tourId;
-    to.startDate = from.startDate;
-    to.endDate = from.endDate;
-    to.location = from.location;
-    to._isEmpty = from._isEmpty;
-    to.safaris = from.safaris;
   }
 
   static empty() {

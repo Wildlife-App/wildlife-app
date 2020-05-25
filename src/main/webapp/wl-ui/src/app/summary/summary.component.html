@@ -24,7 +24,7 @@
       </div>
       <!-- If tours are recorded -->
       <div *ngFor="let tour of tours">
-        <a href="#" title="Show details of this tour." [routerLink]="['/tours', tour.resourceId]">
+        <a href="#" title="Show details of this tour." [routerLink]="[uriFromRoot, uriTour, tour.resourceId]">
           <div class="margin-top-xx-lg panel-hover">
             <div class="panel panel-primary ">
               <div class="panel-heading summary-panel-heading">
@@ -70,7 +70,7 @@
           <div class="row">
             <div class="col-sm-9"></div>
             <div class="col-sm-3 text-right">
-              <a class="btn btn-primary" routerLink="/newtour">Add Tour</a>
+              <a class="btn btn-primary" [routerLink]="addTourIrl">Add Tour</a>
             </div>
           </div>
         </div>

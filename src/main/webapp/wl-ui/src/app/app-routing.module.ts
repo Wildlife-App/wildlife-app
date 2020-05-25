@@ -22,6 +22,11 @@ import {TourSelectLocationComponent} from "./tours/tour-select-location/tour-sel
 import {AddTourComponent} from "./tours/add-tour/add-tour.component";
 import {AddTourLocationsResolveRouteGuardService} from "./route-guards/add-tour-locations-resolve-route-guard.service";
 import {EditTourResolveRouteGuardService} from "./route-guards/edit-tour-resolve-route-guard.service";
+import {AnimalLoadAnimalTypeResolveService} from "./route-guards/animal-load-animal-type-resolve.service";
+import {AnimalLoadFoodHabitResolveService} from "./route-guards/animal-load-food-habit-resolve.service";
+import {AnimalLoadExistenceStatusResolveService} from "./route-guards/animal-load-existence-status-resolve.service";
+import {CanDeactivateAnimalComponentService} from "./route-guards/can-deactivate-animal-component.service";
+import {AnimalLoadTourResolveService} from "./route-guards/animal-load-tour-resolve.service";
 
 const routes: Routes = [
   {
@@ -38,7 +43,14 @@ const routes: Routes = [
   },
   {
     path: WILDLIFE_URI,
-    component: AddAnimalComponent
+    component: AddAnimalComponent,
+    resolve: {
+      animalTypes: AnimalLoadAnimalTypeResolveService,
+      foodHabits: AnimalLoadFoodHabitResolveService,
+      existenceStatuses: AnimalLoadExistenceStatusResolveService,
+      tour: AnimalLoadTourResolveService
+    },
+    canDeactivate: [CanDeactivateAnimalComponentService]
   },
   {
     path: LOCATIONS_URI,

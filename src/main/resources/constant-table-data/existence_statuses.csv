@@ -1,0 +1,10 @@
+existence_status_id,existence_status     ,existence_status_description
+CR,Critically endangered,Extremely high risk of extinction in the wild
+DD,Data deficient,Not enough data to make an assessment of its risk of extinction
+EN,Endangered,High risk of extinction in the wild
+EW,Extinct in the wild,"Known only to survive in captivity, or as a naturalized population outside its historic range."
+EX,Extinct,No known living individuals.
+LC,Least concern,Lowest risk; does not qualify for a higher risk category. Widespread and abundant taxa are included in this category.
+NE,Not evaluated,Has not yet been evaluated against the criteria.
+NT,Near threatened,Likely to become endangered in the near future
+VU,Vulnerable,High risk of endangerment in the wild

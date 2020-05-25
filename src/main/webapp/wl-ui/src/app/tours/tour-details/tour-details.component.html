@@ -2,36 +2,44 @@
   <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
-      <div class="panel panel-primary ">
-        <div class="panel-heading font-lg">
-          Tour to {{tour.location.locationName}}
-        </div>
-        <div class="panel-body padding-x-lg font-lg">
-          <div class="row">
-            <div class="col-sm-4">
-
-            </div>
-            <div class="col-sm-4">
-              <table>
-                <tr>
-                  <td class="label-col text-right padding-md">Start Date :</td>
-                  <td class="data-col padding-md">{{tour.startDate | date}}</td>
-                </tr>
-                <tr>
-                  <td class="text-right padding-md">End date :</td>
-                  <td class="padding-md">{{tour.endDate | date}}</td>
-                </tr>
-              </table>
+      <div class="margin-top-xx-lg panel-hover">
+        <div class="panel panel-primary ">
+          <div class="panel-heading summary-panel-heading">
+            <h3>Tour to {{tour.location.locationName}} from {{tour.startDate | date}} to {{tour.endDate | date}}</h3>
+          </div>
+          <div class="panel-body summary-panel-body">
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <div class="col-sm-2 text-center">
+                <h3>Safaris completed</h3>
+                <h1 [ngClass]="tour.safaris > 1 ? 'safari-count-moderate' : 'safari-count-poor'">{{tour.safaris}}</h1>
+              </div>
+              <div class="col-sm-4 text-center">
+                <table class="">
+                  <tr>
+                    <td style="width: 350px;"><h4 style="font-size: x-large">Spotted Animals</h4></td>
+                    <td class="padding-md">
+                      <h4>
+                        <a class="btn btn-sm btn-primary" (click)="navigateToAddAnimal();">
+                          <span class="glyphicon glyphicon-plus"></span> Add More
+                        </a>
+                      </h4>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="panel-footer text-center">
-          <div class="btn-block">
-            <a class="btn btn-primary btn-lg" routerLink="/home" title="Back to summary page"><span class="fa fa-hand-o-left"></span>&nbsp;Back</a>
-            <a class="btn btn-primary btn-lg" title="Edit this tour" (click)="navigateToEditTour()">
-              <span class="fa fa-edit"></span>&nbsp;Edit</a>
+          <div class="panel-footer text-center">
+            <div class="btn-block">
+              <a class="btn btn-info btn-lg" routerLink="/home" title="Back to summary page"><span
+                class="fa fa-hand-o-left"></span>&nbsp;Back</a>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <a class="btn btn-primary btn-lg" title="Edit this tour" (click)="navigateToEditTour()">
+                <span class="fa fa-edit"></span>&nbsp;Edit</a>
+            </div>
+            <div class="clearfix"></div>
           </div>
-          <div class="clearfix"></div>
         </div>
       </div>
     </div>

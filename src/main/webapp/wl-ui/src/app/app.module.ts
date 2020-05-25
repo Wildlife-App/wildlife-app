@@ -24,6 +24,11 @@ import {AddTourComponent} from "./tours/add-tour/add-tour.component";
 import {EditTourResolveRouteGuardService} from "./route-guards/edit-tour-resolve-route-guard.service";
 import {DataLoaderService} from "./data-loader/data-loader.service";
 import {AddTourLocationsResolveRouteGuardService} from "./route-guards/add-tour-locations-resolve-route-guard.service";
+import {AnimalLoadAnimalTypeResolveService} from "./route-guards/animal-load-animal-type-resolve.service";
+import {AnimalLoadExistenceStatusResolveService} from "./route-guards/animal-load-existence-status-resolve.service";
+import {AnimalLoadFoodHabitResolveService} from "./route-guards/animal-load-food-habit-resolve.service";
+import {CanDeactivateAnimalComponentService} from "./route-guards/can-deactivate-animal-component.service";
+import {AnimalLoadTourResolveService} from "./route-guards/animal-load-tour-resolve.service";
 
 @NgModule({
   declarations: [
@@ -53,7 +58,12 @@ import {AddTourLocationsResolveRouteGuardService} from "./route-guards/add-tour-
     HttpService,
     CanDeactivateNewPlaceService,
     EditTourResolveRouteGuardService,
-    AddTourLocationsResolveRouteGuardService
+    AddTourLocationsResolveRouteGuardService,
+    AnimalLoadAnimalTypeResolveService,
+    AnimalLoadFoodHabitResolveService,
+    AnimalLoadExistenceStatusResolveService,
+    CanDeactivateAnimalComponentService,
+    AnimalLoadTourResolveService
   ],
   bootstrap: [AppComponent]
 })

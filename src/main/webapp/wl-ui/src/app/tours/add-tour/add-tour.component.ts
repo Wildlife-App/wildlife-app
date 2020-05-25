@@ -8,6 +8,7 @@ import {HttpService} from "../../http.service";
 import {MAX_DATE, MIN_DATE, ValidatorUtils} from "../../utils/validator-utils";
 import {DATE_FORMAT, HOME_URI, prepareUrl} from "../../app.constants";
 import {TourModel} from "../../models/tour.model";
+import {parseDate} from "ngx-bootstrap/chronos";
 
 @Component({
   selector: 'app-add-tour',
@@ -15,16 +16,18 @@ import {TourModel} from "../../models/tour.model";
   styleUrls: ['./add-tour.component.css']
 })
 export class AddTourComponent implements OnInit {
+  readonly currentTour: TourModel;
   private tourForm: FormGroup;
-  private isRedirected = false;
+
   private isEditing = false;
+  private isRedirected = false;
   private selectedLocation: LocationModel;
   private displayMessage: DisplayMessageModel = DisplayMessageModel.create();
   private allLocations: LocationModel[] = [];
   private isSubmittable: boolean = false;
   private fromDatePickerConfig: Partial<BsDatepickerConfig>;
   private toDatePickerConfig: Partial<BsDatepickerConfig>;
-  private currentTour: TourModel;
+
   private validationMessages = {
     'selectedLocation': {
       'required': 'Location name is required.',
@@ -45,8 +48,8 @@ export class AddTourComponent implements OnInit {
     'tourDuration': {
       'toDateGreaterThanFromDate': 'End date cannot be earlier than start date.',
     },
-    'safaris' : {
-      'min' : 'Safari count cannot be negative.'
+    'safaris': {
+      'min': 'Safari count cannot be negative.'
     }
   };
   private formErrors = {
@@ -56,45 +59,26 @@ export class AddTourComponent implements OnInit {
     'toDate': '',
     'endDate': '',
     'tourDuration': '',
-    'safaris' : ''
+    'safaris': ''
   };
 
   constructor(private formBuilder: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private httpService: HttpService,
               private router: Router) {
-    this.fromDatePickerConfig = Object.assign({}, {
-      containerClass: 'theme-dark-blue',
-      isAnimated: true,
-      showWeekNumbers: false,
-      dateInputFormat: DATE_FORMAT,
-      minDate: MIN_DATE,
-      maxDate: MAX_DATE
-    });
-    this.buildForm();
 
-    const fetchedLocations: LocationModel[] = this.activatedRoute.snapshot.data['locations'].content;
-    fetchedLocations.forEach(fetchedLocation => this.allLocations.push(LocationModel.fromData(fetchedLocation)));
+    this.setFromDateConfig();
+    this.setInitialToDateConfig();
+    this.buildForm();
+    this.loadLocations();
 
     const editingValue = this.activatedRoute.snapshot.queryParamMap.get('editing');
     if (editingValue) {
-      const currentTour: TourModel = this.activatedRoute.snapshot.data['currentTour'];
+      const loadedTour: TourModel = this.activatedRoute.snapshot.data['currentTour'];
+      console.log('loadedTour >>>>>  ', loadedTour);
+      const currentTour: TourModel = TourModel.fromDataForView(loadedTour);
       this.isEditing = true;
       this.currentTour = currentTour;
-    }
-  }
-
-  private setData(): void {
-    if (this.isEditing) {
-      console.log('Editing a tour...');
-      this.tourForm.get('tourDuration').get('fromDate').setValue(this.currentTour.startDate);
-      this.updateToDateConfig();
-      this.tourForm.get('tourDuration').get('toDate').setValue(this.currentTour.endDate);
-      this.selectedLocation = LocationModel.fromData(this.currentTour.location);
-      this.updateLocation();
-    } else if (this.isRedirected) {
-      console.log('Adding a tour with new location...');
-      this.updateLocation();
     }
   }
 
@@ -124,8 +108,32 @@ export class AddTourComponent implements OnInit {
         fromDate: ['', [Validators.required, FutureDateValidator]],
         toDate: ['', [Validators.required, FutureDateValidator]]
       }, {validator: FromAndToDateValidator}),
-      safaris : [0, [Validators.min(0)]]
+      safaris: [0, [Validators.min(0)]]
     });
+  }
+
+  private loadLocations(): void {
+    const routeData: any = this.activatedRoute.snapshot.data['locations'];
+    if (routeData && routeData.page && routeData.page.totalElements > 0) {
+      const fetchedLocations: LocationModel[] = this.activatedRoute.snapshot.data['locations'].content;
+      fetchedLocations.forEach(fetchedLocation => this.allLocations.push(LocationModel.fromData(fetchedLocation)));
+    }
+  }
+
+  private setData(): void {
+    if (this.isEditing) {
+      this.tourForm.get('tourDuration').get('fromDate').setValue(parseDate(this.currentTour.startDate, DATE_FORMAT));
+      this.updateToDateConfig();
+
+      this.tourForm.get('tourDuration').get('toDate').setValue(parseDate(this.currentTour.endDate, DATE_FORMAT));
+
+      this.selectedLocation = LocationModel.fromData(<LocationModel>this.currentTour.location);
+      this.updateLocation();
+      this.tourForm.get('safaris').setValue(this.currentTour.safaris);
+    } else if (this.isRedirected) {
+      console.log('Adding a tour with new location...');
+      this.updateLocation();
+    }
   }
 
   private resolveRouteVariables() {
@@ -133,7 +141,6 @@ export class AddTourComponent implements OnInit {
     const locationResourceId = +queryParamMap.get('resourceId');
 
     if (locationResourceId && locationResourceId > 0) {
-      console.log('Loaded locations: ', this.allLocations);
       this.selectLocation(locationResourceId);
       this.isRedirected = true;
     } else {
@@ -143,15 +150,28 @@ export class AddTourComponent implements OnInit {
   }
 
   private validateTourForm() {
-    this.isSubmittable = true;
     ValidatorUtils.validateForm(this.tourForm, this.validationMessages, this.formErrors);
     if (!this.tourForm.touched || this.tourForm.pristine) {
       this.isSubmittable = false;
       console.log('Invalid form!! Not touched or pristine');
+    } else {
+      this.isSubmittable = true;
     }
     if (this.tourForm.dirty && !this.tourForm.valid) {
       this.isSubmittable = false;
       console.log('Invalid form!! Not Valid');
+    } else {
+      this.isSubmittable = true;
+    }
+    // Value check if on edit screen
+    if (this.isEditing) {
+      const formStartDate: Date = this.tourForm.get('tourDuration').get('fromDate').value;
+      const formEndDate: Date = this.tourForm.get('tourDuration').get('toDate').value;
+      const formSafaris: number = this.tourForm.get('safaris').value;
+      const formLocation: LocationModel = this.tourForm.get('selectedLocation').value;
+
+      this.isSubmittable = !this.currentTour.equals(new TourModel(formStartDate, formEndDate, formLocation,
+        0, 0, formSafaris));
     }
   }
 
@@ -168,13 +188,28 @@ export class AddTourComponent implements OnInit {
   private updateToDateConfig(): void {
     const updatedValue = this.tourForm.get('tourDuration').get('fromDate').value;
     this.setToDateConfig(updatedValue);
+    this.setToDateFromFromDate();
   }
 
-  private setToDateConfig(fromDateStr: string): void {
-    const fromDate: Date = new Date(fromDateStr);
-    console.log('From DateStr:', fromDateStr);
-    console.log('From Date:', fromDate);
+  private setFromDateConfig(): void {
+    this.fromDatePickerConfig = Object.assign({}, {
+      containerClass: 'theme-dark-blue',
+      isAnimated: true,
+      showWeekNumbers: false,
+      dateInputFormat: DATE_FORMAT,
+      minDate: MIN_DATE,
+      maxDate: MAX_DATE
+    });
+  }
 
+  private setInitialToDateConfig() {
+    this.toDatePickerConfig = Object.assign({}, {
+      containerClass: 'theme-dark-blue',
+      dateInputFormat: DATE_FORMAT
+    });
+  }
+
+  private setToDateConfig(fromDate: Date): void {
     this.toDatePickerConfig = Object.assign({}, {
       containerClass: 'theme-dark-blue',
       showWeekNumbers: false,
@@ -182,13 +217,18 @@ export class AddTourComponent implements OnInit {
       minDate: fromDate,
       maxDate: MAX_DATE
     });
-    console.log('Config after set:', this.toDatePickerConfig);
+  }
+
+  private setToDateFromFromDate(): void {
+    const fromDate = this.tourForm.get('tourDuration').get('fromDate').value;
+    const toDate: Date = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 1);
+    this.tourForm.get('tourDuration').get('toDate').setValue(toDate);
   }
 
   private isInvalidFromDate(): boolean | null {
     const control: AbstractControl = this.tourForm.get('tourDuration').get('fromDate');
     const fromDate: Date = new Date(control.value);
-    if (fromDate && fromDate.getDay() > 0 && control.valid) {
+    if (fromDate && fromDate.getDate() > 0 && control.valid) {
       return null;
     }
     return true;
@@ -208,7 +248,7 @@ export class AddTourComponent implements OnInit {
     const safaris = this.tourForm.get('safaris').value;
     const tour: TourModel = new TourModel(startDate, endDate, location, 0, 0, safaris);
 
-    if(this.isEditing) {
+    if (this.isEditing) {
       tour.resourceId = this.currentTour.resourceId;
       this.putData(tour);
     } else {
@@ -272,10 +312,7 @@ export class AddTourComponent implements OnInit {
 function FromAndToDateValidator(control: AbstractControl): { [key: string]: any } {
   const fromDate: Date = new Date(control.get('fromDate').value);
   const toDate: Date = new Date(control.get('toDate').value);
-  console.log('fromDate:', fromDate);
-  console.log('toDate:', toDate);
   if (toDate < fromDate) {
-    console.log('toDate is less than from date');
     return {'toDateGreaterThanFromDate': true};
   }
   return null;
@@ -283,14 +320,11 @@ function FromAndToDateValidator(control: AbstractControl): { [key: string]: any 
 
 function FutureDateValidator(control: AbstractControl): { [key: string]: any } {
   const dateVal = control.value;
-  console.log('Entered date', dateVal);
-
   if (!dateVal || dateVal === '') {
     return null;
   }
   const date: Date = new Date(dateVal);
   if (date > MAX_DATE) {
-    console.log('Future to date entered');
     return {'futureDate': true};
   }
   return null;

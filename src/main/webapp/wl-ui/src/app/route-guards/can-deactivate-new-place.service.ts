@@ -10,7 +10,7 @@ export class CanDeactivateNewPlaceService implements CanDeactivate<LocationCompo
     if(component.LocationForm.dirty) {
       return confirm('Are you sure you want to discard your changes?');
     }
-    return true;;
+    return true;
   }
 
 }

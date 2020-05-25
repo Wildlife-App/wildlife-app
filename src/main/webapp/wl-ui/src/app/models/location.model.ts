@@ -3,11 +3,11 @@ import {BaseResource} from "./base.resource";
 
 export class LocationModel extends BaseResource {
   constructor(
-              locationName: string,
-              area: number,
-              state: any,
-              resourceId?: number,
-              locationId?: number) {
+    locationName: string,
+    area: number,
+    state: any,
+    resourceId?: number,
+    locationId?: number) {
     super();
     this.resourceId = resourceId;
     this.locationId = locationId;
@@ -28,5 +28,9 @@ export class LocationModel extends BaseResource {
       +data.resourceId, +data.resourceId);
     locationModel.links = locationModel.fromLinks(data.links);
     return locationModel;
+  }
+
+  static empty(): LocationModel {
+    return new LocationModel('', 0, {}, 0, 0);
   }
 }

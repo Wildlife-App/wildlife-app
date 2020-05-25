@@ -7,15 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
 @Data
 @Builder
@@ -41,6 +44,10 @@ public class Location implements Serializable, DBColumnConstants, Comparable<Loc
 
     @Column(name = COL_TBL_CREATE_DT)
     private Date createDate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "related_resource_id", referencedColumnName = COL_TBL_LOCATION_ID)
+    private Set<ResourceImage> resourceImages;
 
     @Override
     public int compareTo(Location o) {
