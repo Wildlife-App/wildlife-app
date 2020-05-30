@@ -28,6 +28,10 @@ public class AnimalType implements Serializable, DBColumnConstants, ConstantData
     @Column(name = COL_ANIMAL_TYPE_DEFINITION, length = 3000, nullable = false)
     private String animalTypeDefinition;
 
+    public String getResourceId() {
+        return this.animalTypeId;
+    }
+
     @Override
     public boolean isEmpty() {
         return StringUtils.isEmpty(animalTypeId) || StringUtils.isEmpty(animalTypeName);

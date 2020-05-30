@@ -1,7 +1,6 @@
 import {BaseResource} from "./base.resource";
 
 export class ExistenceStatusModel extends BaseResource {
-
   constructor(existenceStatusId: string, existenceStatus: string, existenceStatusDescription: string) {
     super();
     this.existenceStatusId = existenceStatusId;
@@ -13,8 +12,10 @@ export class ExistenceStatusModel extends BaseResource {
   existenceStatus: string;
   existenceStatusDescription: string;
 
+  private resourceId: string;
+
   static fromData(data: ExistenceStatusModel): ExistenceStatusModel {
-    const existenceStatus = new ExistenceStatusModel(data.existenceStatusId, data.existenceStatus, data.existenceStatusDescription);
+    const existenceStatus = new ExistenceStatusModel(data.resourceId, data.existenceStatus, data.existenceStatusDescription);
     existenceStatus.links = existenceStatus.fromLinks(data.links);
     return existenceStatus;
   }

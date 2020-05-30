@@ -8,7 +8,7 @@ import com.wildlife.app.wildlife.app.models.constants.tables.FoodHabitType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
-import java.util.Set;
+import java.util.List;
 
 @Projection(name = "animalProjection", types = Animal.class)
 public interface AnimalProjection {
@@ -19,11 +19,13 @@ public interface AnimalProjection {
 
     String getScientificName();
 
+    String getAnimalGender();
+
     AnimalType getAnimalType();
 
     ExistenceStatus getExistenceStatus();
 
     FoodHabitType getFoodHabitType();
 
-    Set<ResourceImage> getResourceImages();
+    List<ResourceImage> getResourceImages();
 }

@@ -54,6 +54,7 @@ export class TourModel extends BaseResource {
       data.resourceId, data.resourceId, data.safaris);
 
     tour.links = tour.fromLinks(data.links);
+    console.log('Received data after converting to Tour Model', tour);
     return tour;
   }
 

@@ -30,6 +30,24 @@ export class LocationModel extends BaseResource {
     return locationModel;
   }
 
+  static fromDataArray(dataArr: LocationModel[]): LocationModel[] {
+    const locations: LocationModel[] = [];
+
+    if(!dataArr || dataArr.length == 0) {
+      return locations;
+    }
+
+    dataArr.forEach(data => {
+      const locationModel = new LocationModel(data.locationName, +data.area,
+        StateModel.fromState(<StateModel>data.state).getSelfLink(),
+        +data.resourceId, +data.resourceId);
+      locationModel.links = locationModel.fromLinks(data.links);
+      locations.push(locationModel);
+    });
+
+    return locations;
+  }
+
   static empty(): LocationModel {
     return new LocationModel('', 0, {}, 0, 0);
   }

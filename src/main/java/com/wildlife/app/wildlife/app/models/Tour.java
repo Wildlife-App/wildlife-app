@@ -5,15 +5,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = DBColumnConstants.TBL_TOUR)
@@ -31,8 +35,11 @@ public class Tour implements Serializable, DBColumnConstants {
     @Column(name = COL_TBL_TOUR_END_DATE, nullable = false)
     private Date endDate;
 
-    @OneToOne
-    @JoinColumn(name = COL_TBL_LOCATION_ID, referencedColumnName = COL_TBL_LOCATION_ID, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = COL_TBL_LOCATION_ID,
+            referencedColumnName = COL_TBL_LOCATION_ID,
+            nullable = false,
+            foreignKey = @ForeignKey(name = "location_tour_mapping", value = ConstraintMode.CONSTRAINT))
     private Location location;
 
     @Column(name = COL_TBL_TOUR_SAFARIS_NO)
@@ -40,5 +47,8 @@ public class Tour implements Serializable, DBColumnConstants {
 
     @Column(name = COL_TBL_CREATE_DT)
     private Date createDate;
+
+    @ManyToMany(mappedBy = "spottedInTours")
+    private List<Animal> spottedAnimals;
 
 }

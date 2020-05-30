@@ -9,6 +9,7 @@ import {
   prepareUrl,
   TOUR_EXCERPT, WILDLIFE_URI
 } from "../../app.constants";
+import {AnimalModel} from "../../models/animal.model";
 
 @Component({
   selector: 'app-tour-details',
@@ -21,6 +22,7 @@ export class TourDetailsComponent implements OnInit {
 
   private tour: TourModel = TourModel.empty();
   private currentTourId: number = -1;
+  private spottedAnimals: AnimalModel[] = [];
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -28,30 +30,27 @@ export class TourDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resolveRouteVariable().finally(() => this.loadTour());
+    this.resolveRouteVariable();
   }
 
-  private async resolveRouteVariable() {
-    await this.activatedRoute.paramMap.subscribe(paramMap => {
-      console.log('Fetched param map: ', paramMap);
-      this.currentTourId = +paramMap.get('id');
-    });
-  }
+  private resolveRouteVariable() {
+    const currentTourData: any = this.activatedRoute.snapshot.data['tourDetails'];
+    this.tour = TourModel.fromDataForView(currentTourData);
 
-  private loadTour() {
-    const url: string = prepareUrl(['/tours', this.currentTourId.toString()],
-      [{'projection': TOUR_EXCERPT}]);
+    const spottedAnimalsData: any = this.activatedRoute.snapshot.data['spottedAnimals'];
 
-    console.log('Fetching tour from: ', url);
-    this.httpService.getResource(url).subscribe(data => {
-      console.log('Fetched tour: ', data);
-      this.tour = TourModel.fromDataForView(data);
-    });
+    if (spottedAnimalsData && spottedAnimalsData.content && spottedAnimalsData.content.length > 0) {
+      (<AnimalModel[]>spottedAnimalsData.content).forEach(data => {
+        this.spottedAnimals.push(AnimalModel.fromData(data));
+      });
+    }
+
+    console.log('This spottedAnimals', this.spottedAnimals);
   }
 
   private navigateToEditTour() {
     this.router.navigate([NEW_TOUR_LANDING_URI, NEW_TOUR_EXISTING_LOCATION_URI],
-      {queryParams: {'editing' : this.tour.resourceId}})
+      {queryParams: {'editing': this.tour.resourceId}})
       .finally();
   }
 

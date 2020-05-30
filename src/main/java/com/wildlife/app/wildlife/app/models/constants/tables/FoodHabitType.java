@@ -28,6 +28,10 @@ public class FoodHabitType implements Serializable, DBColumnConstants, ConstantD
     @Column(name = COL_FOOD_HABIT_TYPE_DEFINITION, length = 3000)
     private String foodHabitTypeDefinition;
 
+    public String getResourceId() {
+        return this.foodHabitTypeId;
+    }
+
     @Override
     public boolean isEmpty() {
         return StringUtils.isEmpty(foodHabitType) || StringUtils.isEmpty(foodHabitTypeId);

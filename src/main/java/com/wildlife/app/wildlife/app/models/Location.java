@@ -7,24 +7,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = DBColumnConstants.TBL_LOCATION)
+@Entity
+@Table(name = DBColumnConstants.TBL_LOCATION)
 public class Location implements Serializable, DBColumnConstants, Comparable<Location> {
     private static final long serialVersionUID = -5463229502452123L;
     @Id
@@ -36,7 +40,10 @@ public class Location implements Serializable, DBColumnConstants, Comparable<Loc
     private String locationName;
 
     @OneToOne
-    @JoinColumn(name = COL_TBL_STATE_CODE, referencedColumnName = COL_TBL_STATE_CODE, nullable = false)
+    @JoinColumn(name = COL_TBL_STATE_CODE,
+            referencedColumnName = COL_TBL_STATE_CODE,
+            nullable = false,
+            foreignKey = @ForeignKey(name = "location_state_mapping", value = ConstraintMode.CONSTRAINT))
     private State state;
 
     @Column(name = COL_TBL_LOCATION_AREA, length = 8, nullable = false)
@@ -45,16 +52,18 @@ public class Location implements Serializable, DBColumnConstants, Comparable<Loc
     @Column(name = COL_TBL_CREATE_DT)
     private Date createDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "related_resource_id", referencedColumnName = COL_TBL_LOCATION_ID)
-    private Set<ResourceImage> resourceImages;
+    @ManyToMany(mappedBy = "spottingLocations")
+    private List<Animal> spottedAnimals;
+
+    @OneToMany(mappedBy = "location")
+    private List<Tour> tours;
+
+    public int getResourceId(){
+        return this.locationId;
+    }
 
     @Override
     public int compareTo(Location o) {
         return this.locationName.compareTo(o.locationName);
-    }
-
-    public int getResourceId() {
-        return this.locationId;
     }
 }

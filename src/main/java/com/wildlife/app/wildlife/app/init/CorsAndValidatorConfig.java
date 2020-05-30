@@ -1,5 +1,6 @@
 package com.wildlife.app.wildlife.app.init;
 
+import com.wildlife.app.wildlife.app.validators.CreateAnimalRequestValidator;
 import com.wildlife.app.wildlife.app.validators.TourRequestValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 public class CorsAndValidatorConfig implements RepositoryRestConfigurer {
 	private TourRequestValidator tourRequestValidator;
+	private CreateAnimalRequestValidator createAnimalRequestValidator;
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
@@ -37,5 +39,6 @@ public class CorsAndValidatorConfig implements RepositoryRestConfigurer {
 	public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
 		validatingListener.addValidator("beforeCreate", this.tourRequestValidator);
 		validatingListener.addValidator("beforeSave", this.tourRequestValidator);
+		validatingListener.addValidator("beforeCreate", this.createAnimalRequestValidator);
 	}
 }

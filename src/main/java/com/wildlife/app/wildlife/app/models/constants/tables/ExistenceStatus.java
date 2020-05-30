@@ -28,6 +28,10 @@ public class ExistenceStatus implements Serializable, DBColumnConstants, Constan
     @Column(name = COL_EXISTENCE_STATUS_DESCRIPTION, length = 3000, nullable = false)
     private String existenceStatusDescription;
 
+    public String getResourceId() {
+        return this.existenceStatusId;
+    }
+
     @Override
     public boolean isEmpty() {
         return StringUtils.isEmpty(existenceStatusId) || StringUtils.isEmpty(existenceStatus);

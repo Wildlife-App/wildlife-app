@@ -14,3 +14,24 @@
 .placeholder-text {
   color: darkgray;
 }
+
+a:hover {
+  cursor: pointer;
+}
+a {
+  color: steelblue;
+}
+
+
+.animal-selector {
+  margin-top: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.large-margin-top {
+  margin-top: 100px;
+}
+.large-padding {
+  padding-bottom: 80px;
+}

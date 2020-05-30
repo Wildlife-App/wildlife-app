@@ -1,6 +1,7 @@
 import {parseDate} from "ngx-bootstrap/chronos";
 
 export const TOUR_EXCERPT: string = 'tourExcerpt';
+export const ANIMAL_EXCERPT: string = 'animalProjection';
 export const HOST: string = 'http://localhost:8090/wildlife/v1';
 
 // URIs

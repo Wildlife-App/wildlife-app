@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,9 +23,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -48,36 +48,46 @@ public class Animal implements Serializable, DBColumnConstants {
     private String animalGender;
 
     @OneToOne
-    @JoinColumn(name = COL_ANIMAL_TYPE_ID, referencedColumnName = COL_ANIMAL_TYPE_ID, nullable = false)
+    @JoinColumn(name = COL_ANIMAL_TYPE_ID,
+            referencedColumnName = COL_ANIMAL_TYPE_ID,
+            nullable = false,
+            foreignKey = @ForeignKey(name = "animal_type_mapping", value = ConstraintMode.CONSTRAINT))
     private AnimalType animalType;
 
     @OneToOne
-    @JoinColumn(name = COL_EXISTENCE_STATUS_ID, referencedColumnName = COL_EXISTENCE_STATUS_ID, nullable = false)
+    @JoinColumn(name = COL_EXISTENCE_STATUS_ID,
+            referencedColumnName = COL_EXISTENCE_STATUS_ID,
+            nullable = false,
+            foreignKey = @ForeignKey(name = "animal_existence_mapping", value = ConstraintMode.CONSTRAINT))
     private ExistenceStatus existenceStatus;
 
     @OneToOne
-    @JoinColumn(name = COL_FOOD_HABIT_TYPE_ID, referencedColumnName = COL_FOOD_HABIT_TYPE_ID, nullable = false)
+    @JoinColumn(name = COL_FOOD_HABIT_TYPE_ID,
+            referencedColumnName = COL_FOOD_HABIT_TYPE_ID,
+            nullable = false,
+            foreignKey = @ForeignKey(name = "animal_food_habit_mapping", value = ConstraintMode.CONSTRAINT))
     private FoodHabitType foodHabitType;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = JOIN_TBL_ANIMAL_LOCATION_MAPPING,
             joinColumns = @JoinColumn(name = JOIN_COL_LOCATION_ID),
-            inverseJoinColumns = @JoinColumn(name = JOIN_COL_ANIMAL_ID))
+            inverseJoinColumns = @JoinColumn(name = JOIN_COL_ANIMAL_ID),
+            foreignKey = @ForeignKey(name = "location_animal_mapping", value = ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(name = "animal_location_mapping", value = ConstraintMode.CONSTRAINT))
     private List<Location> spottingLocations;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = COL_TBL_ANIMAL_ID, referencedColumnName = COL_TBL_ANIMAL_ID)
-    private Set<AnimalOtherName> animalOtherNames;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = JOIN_TBL_ANIMAL_TOUR_MAPPING,
+            joinColumns = @JoinColumn(name = "tour_id"),
+            inverseJoinColumns = @JoinColumn(name = "animal_id"),
+            foreignKey = @ForeignKey(name = "tour_animal_mapping", value = ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(name = "animal_tour_mapping", value = ConstraintMode.CONSTRAINT))
+    private List<Tour> spottedInTours;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "related_resource_id", referencedColumnName = COL_TBL_ANIMAL_ID)
-    private Set<ResourceImage> resourceImages;
-
-    @Column(name = COL_TBL_ANIMAL_FIRST_SPOTTING_DATE, updatable = false, nullable = false, length = 50)
-    private Date firstSpottingDate;
-
-    public int getResourceId() {
+    public int getResourceId(){
         return this.animalId;
     }
 
+    @OneToMany(mappedBy = "animal")
+    private List<ResourceImage> resourceImages;
 }

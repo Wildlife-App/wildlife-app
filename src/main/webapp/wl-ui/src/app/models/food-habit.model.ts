@@ -12,8 +12,10 @@ export class FoodHabitModel extends BaseResource {
   foodHabitType: string;
   foodHabitTypeDefinition: string;
 
+  private resourceId: string;
+
   static fromData(data: FoodHabitModel): FoodHabitModel {
-    const foodHabit = new FoodHabitModel(data.foodHabitTypeId, data.foodHabitType, data.foodHabitTypeDefinition);
+    const foodHabit = new FoodHabitModel(data.resourceId, data.foodHabitType, data.foodHabitTypeDefinition);
     foodHabit.links = foodHabit.fromLinks(data.links);
     return foodHabit;
   }

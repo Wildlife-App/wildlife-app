@@ -14,8 +14,10 @@ export class AnimalTypeModel extends BaseResource {
   animalTypeName: string;
   animalTypeDefinition: string;
 
+  private resourceId: string;
+
   static fromData(data: AnimalTypeModel): AnimalTypeModel {
-    const animalType = new AnimalTypeModel(data.animalTypeId, data.animalTypeName, data.animalTypeDefinition);
+    const animalType = new AnimalTypeModel(data.resourceId, data.animalTypeName, data.animalTypeDefinition);
     animalType.links = animalType.fromLinks(data.links);
 
     return animalType;
