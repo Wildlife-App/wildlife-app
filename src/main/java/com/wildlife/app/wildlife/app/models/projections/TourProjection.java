@@ -10,8 +10,22 @@ import java.sql.Date;
 public interface TourProjection {
     @Value("#{target.getTourId()}")
     int getResourceId();
+
+    @Value("#{target.getLocation().getLocationName()}")
+    String getLocationName();
+
+    @Value("#{target.getLocation().getLocationId()}")
+    int getTourLocationId();
+
+    @Value("#{target.getLocation().getState().getStateName()}")
+    String getStateName();
+
+    @Value("#{target.getLocation().getState().getCountry().getCountryName()}")
+    String getCountryName();
+
     Date getStartDate();
+
     Date getEndDate();
-    LocationProjection getLocation();
+
     int getSafaris();
 }

@@ -1,11 +1,12 @@
 import {StateModel} from "./state.model";
 import {BaseResource} from "./base.resource";
+import {TourModel} from "./tour.model";
 
 export class LocationModel extends BaseResource {
   constructor(
     locationName: string,
-    area: number,
-    state: any,
+    area?: number,
+    state?: any,
     resourceId?: number,
     locationId?: number) {
     super();
@@ -21,8 +22,10 @@ export class LocationModel extends BaseResource {
   locationName: string;
   area: number;
   state: any;
+  tours: TourModel[];
 
   static fromData(data: LocationModel): LocationModel {
+    if (!data) return;
     const locationModel = new LocationModel(data.locationName, +data.area,
       StateModel.fromState(<StateModel>data.state).getSelfLink(),
       +data.resourceId, +data.resourceId);
@@ -33,7 +36,7 @@ export class LocationModel extends BaseResource {
   static fromDataArray(dataArr: LocationModel[]): LocationModel[] {
     const locations: LocationModel[] = [];
 
-    if(!dataArr || dataArr.length == 0) {
+    if (!dataArr || dataArr.length == 0) {
       return locations;
     }
 

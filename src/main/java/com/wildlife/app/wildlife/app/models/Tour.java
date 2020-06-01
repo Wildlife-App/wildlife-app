@@ -51,4 +51,8 @@ public class Tour implements Serializable, DBColumnConstants {
     @ManyToMany(mappedBy = "spottedInTours")
     private List<Animal> spottedAnimals;
 
+    public int getResourceId() {
+        return this.tourId;
+    }
+
 }

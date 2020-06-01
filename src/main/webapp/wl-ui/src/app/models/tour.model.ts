@@ -21,6 +21,8 @@ export class TourModel extends BaseResource {
   location: LocationModel | string;
   safaris: number;
   content: ContentModel<LocationModel>[];
+  locationName: string;
+  tourLocationId: number
   private _isEmpty: boolean = false;
 
   private empty(): TourModel {
@@ -42,6 +44,11 @@ export class TourModel extends BaseResource {
   static fromDataForView(data: TourModel): TourModel {
     console.log('Received data for converting to Tour Model', data);
     let location: LocationModel;
+
+    //checking for projection
+    if (data.locationName && data.tourLocationId) {
+      location = new LocationModel(data.locationName, 0, {}, data.tourLocationId, data.tourLocationId);
+    }
 
     if (data.location) {
       location = <LocationModel>data.location;

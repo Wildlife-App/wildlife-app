@@ -97,7 +97,6 @@ public class CreateAnimalRequestValidator implements Validator, ErrorConstants {
             LOG.error("Invalid gender!!");
             errors.rejectValue("animalGender", INVALID_ANIMAL_GENDER,
                     String.format("Please enter valid gender - [%s]", String.join(" ", GENDERS)));
-            return;
         }
 
     }

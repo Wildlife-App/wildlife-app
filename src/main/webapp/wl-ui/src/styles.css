@@ -289,7 +289,6 @@ div.cui-card {
 
 div.title {
   background-color: #ffffff;
-  opacity: 0.6;
   width: 100%;
   margin-left: -10px;
 }
@@ -318,8 +317,7 @@ div.title h1 {
 }
 
 body {
-  /*background-color: rgba(75, 155, 180, 0.27);*/
-  background-color: rgba(32, 32, 32, 0.81);
+  background-color: rgba(32, 32, 32, 0.1);
 }
 
 /*Screen resolution upto 1920px or 1080p*/

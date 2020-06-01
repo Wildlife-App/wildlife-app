@@ -30,15 +30,22 @@ import {AnimalLoadTourResolveService} from "./route-guards/animal-load-tour-reso
 import {AnimalLoadAllAnimalsResolveService} from "./route-guards/animal-load-all-animals-resolve.service";
 import {TourDetailsTourResolverService} from "./tours/tour-details/route-guards/tour-details-tour-resolver.service";
 import {TourDetailsSpottedAnimalsResolverService} from "./tours/tour-details/route-guards/tour-details-spotted-animals-resolver.service";
+import {SummaryLoadToursResolveService} from "./summary/route-guards/summary-load-tours-resolve.service";
 
 const routes: Routes = [
   {
     path: ROOT_URI,
-    component: SummaryComponent
+    component: SummaryComponent,
+    resolve: {
+      tourSummary: SummaryLoadToursResolveService
+    }
   },
   {
     path: HOME_URI,
-    component: SummaryComponent
+    component: SummaryComponent,
+    resolve: {
+      tourSummary: SummaryLoadToursResolveService
+    }
   },
   {
     path: TOUR_DETAILS_URI,

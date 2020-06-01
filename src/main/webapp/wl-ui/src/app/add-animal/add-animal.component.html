@@ -235,7 +235,8 @@
       </div>
       <div class="panel-footer text-center">
         <div class="btn-group">
-          <button class="btn btn-lg btn-primary" [routerLink]="['/tours', currentTour.tourId]">Back to Details</button>
+          <button class="btn btn-lg btn-info" [routerLink]="['/tours', currentTour.tourId]">
+            <span class="glyphicon glyphicon-backward"></span> Details</button>
           <button class="btn btn-lg btn-default" (click)="resetForm()"
                   [attr.disabled]="animalForm.pristine ? 'disabled' : null">
             <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset

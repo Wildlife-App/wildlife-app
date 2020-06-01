@@ -1,102 +1,55 @@
 <div class="container-fluid" style="margin-top:80px;">
   <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8 card info-box">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8 card info-box">
       <div class="title text-center">
-        <h1>Showing tours from {{startRecordIndex}} to {{endRecordIndex}} of total {{totalRecords}} tours</h1>
+        <h2>{{greetingText}}, {{userName | uppercase}}</h2>
+        <h2>Your Tours Summary</h2>
       </div>
+      <!-- Sorting Start-->
       <div class="row">
-        <div class="col-sm-4 pull-right">
+        <div class="col-lg-4 pull-right">
           <div class="form-inline" [formGroup]="sortForm">
             <label for="sort-by" class="control-label">Sort By</label> &nbsp;&nbsp;
-            <select id="sort-by" class="form-control" formControlName="sortBy" (change)="loadSortedData()">
+            <select id="sort-by" class="form-control" formControlName="sortBy">
               <option value="location">Location</option>
               <option value="startDate">Start Date</option>
             </select>
             &nbsp;&nbsp;
             <label for="sort-type" class="control-label">Type</label> &nbsp;&nbsp;
-            <select id="sort-type" class="form-control" formControlName="sortType" (change)="loadSortedData()">
+            <select id="sort-type" class="form-control" formControlName="sortType">
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>
           </div>
         </div>
       </div>
-      <!-- If tours are recorded -->
-      <div *ngFor="let tour of tours">
-        <a href="#" title="Show details of this tour." [routerLink]="[uriFromRoot, uriTour, tour.resourceId]">
-          <div class="margin-top-xx-lg panel-hover">
-            <div class="panel panel-primary ">
-              <div class="panel-heading summary-panel-heading">
-                Tour to {{tour.location.locationName}}
+      <!-- Sorting End-->
+
+      <!-- Collapsible Panel Start-->
+      <div class="row">
+        <div class="col-lg-12 margin-top-x-lg">
+          <div class="panel-group" *ngFor="let summary of summaryList; let i=index;">
+            <div class="panel panel-default margin-top-x-lg" >
+              <div class="panel-heading">
+                <h3 class="panel-title font-xx-lg">
+                  <a class="panel-title-text" href="#panelBody{{i}}" data-toggle="collapse">Tour{{summary.tours.length > 1 ? 's' : ''}} to {{summary.location.locationName}}
+                  <span class="pull-right">Total {{summary.tours.length}} tour{{summary.tours.length > 1 ? 's' : ''}}</span>
+                  </a>
+                </h3>
               </div>
-              <div class="panel-body summary-panel-body">
-                <div class="row">
-                  <div class="col-sm-4"></div>
-                  <div class="col-sm-4 text-center">
-                    <h3>Safaris completed</h3>
-                    <h1 [ngClass]="tour.safaris > 1 ? 'safari-count-moderate' : 'safari-count-poor'">{{tour.safaris}}</h1>
-                  </div>
-                  <div class="col-sm-4">
-                    <table>
-                      <tr>
-                        <td class="text-right padding-md">Start Date :</td>
-                        <td class="padding-md">{{tour.startDate | date}}</td>
-                      </tr>
-                      <tr>
-                        <td class="text-right padding-md">End date :</td>
-                        <td class="padding-md">{{tour.endDate | date}}</td>
-                      </tr>
-                    </table>
-                  </div>
+              <div id="panelBody{{i}}" class="panel-body collapse in">
+                <div class="well well-sm font-md" *ngFor="let tour of summary.tours">
+                    <a [routerLink]="['/tours', tour.tourId]">From {{tour.startDate | date}} to {{tour.endDate | date}}</a>
                 </div>
               </div>
-              <div class="panel-footer">
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- If no tour is recorded -->
-      <div class="panel panel-primary" *ngIf="tours.length === 0" style="margin-top: 100px;">
-        <div class="panel-heading summary-panel-heading">
-          No Tour
-        </div>
-        <div class="panel-body summary-panel-body">
-          <h1 class="text-center padding-x-lg">No Tour Recorded</h1>
-        </div>
-        <div class="panel-footer">
-          <div class="row">
-            <div class="col-sm-9"></div>
-            <div class="col-sm-3 text-right">
-              <a class="btn btn-primary" [routerLink]="addTourIrl">Add Tour</a>
             </div>
           </div>
         </div>
       </div>
 
-      <br><br>
+      <!-- Collapsible Panel End-->
 
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="text-center">
-            <div class="btn-group btn-group-lg">
-              <a class="btn btn-primary" (click)="prev()"
-                 [title]="(this.prevLinkUrl === '#') ? '' : 'Show previous ' + recordPerPage + ' records'"
-                 [attr.disabled]="(this.prevLinkUrl === '#') ? true : null">
-                &lt; Prev
-              </a>
-              <a class="btn btn-primary" (click)="next()"
-                 [title]="(this.nextLinkUrl === '#') ? '' : 'Show next ' + recordPerPage + ' records'"
-                 [attr.disabled]="(this.nextLinkUrl === '#') ? true : null">
-                Next &gt;
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br><br>
     </div>
   </div>
 </div>
