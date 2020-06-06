@@ -10,7 +10,7 @@ export class SummaryLoadToursResolveService implements Resolve<SummaryComponent>
   constructor(private httpService: HttpService){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<SummaryComponent> {
-    return this.httpService.getResource(prepareUrl(['locations', 'search', 'hasTours']));
+    return this.httpService.getResource(prepareUrl(['summary']));
   }
 
 }

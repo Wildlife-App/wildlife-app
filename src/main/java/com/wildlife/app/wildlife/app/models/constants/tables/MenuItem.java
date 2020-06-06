@@ -1,10 +1,8 @@
 
 package com.wildlife.app.wildlife.app.models.constants.tables;
 
-import com.wildlife.app.wildlife.app.models.constants.ConstantData;
 import com.wildlife.app.wildlife.app.models.constants.DBColumnConstants;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.CascadeType;
@@ -17,7 +15,7 @@ import java.util.List;
 
 @Data
 @Entity(name = DBColumnConstants.TBL_MENU_ITEM)
-public class MenuItem implements ConstantData, DBColumnConstants {
+public class MenuItem implements DBColumnConstants {
     @Id
     @Column(name = COL_TBL_MENU_ITEM_ID)
     private String menuItemId;
@@ -33,8 +31,4 @@ public class MenuItem implements ConstantData, DBColumnConstants {
     @JoinColumn(name = "parent_menu_id", referencedColumnName = COL_TBL_MENU_ITEM_ID)
     private List<MenuItem> submenus;
 
-    @Override
-    public boolean isEmpty() {
-        return StringUtils.isEmpty(menuItemId) || StringUtils.isEmpty(menuText) || StringUtils.isEmpty(link);
-    }
 }

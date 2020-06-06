@@ -15,13 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -51,12 +48,6 @@ public class Location implements Serializable, DBColumnConstants, Comparable<Loc
 
     @Column(name = COL_TBL_CREATE_DT)
     private Date createDate;
-
-    @ManyToMany(mappedBy = "spottingLocations")
-    private List<Animal> spottedAnimals;
-
-    @OneToMany(mappedBy = "location")
-    private List<Tour> tours;
 
     public int getResourceId(){
         return this.locationId;

@@ -1,13 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../http.service";
-import {TourModel} from "../models/tour.model";
-import {LinkModel} from "../models/link.model";
-import {PageModel} from "../models/page.model";
-import {FROM_ROOT, NEW_TOUR_LANDING_URI, prepareUrl, TOUR_URI} from "../app.constants";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-import {SummaryLoaderModel} from "../models/summary-loader.model";
-import {LocationModel} from "../models/location.model";
+import {SummaryResponseModel} from "../models/summary-response.model";
+import {prepareUrl} from "../app.constants";
 
 @Component({
   selector: 'app-summary',
@@ -15,30 +11,28 @@ import {LocationModel} from "../models/location.model";
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
-  readonly uriFromRoot: string = FROM_ROOT;
-  readonly uriTour: string = TOUR_URI;
+  // readonly uriFromRoot: string = FROM_ROOT;
+  // readonly uriTour: string = TOUR_URI;
 
   private sortForm: FormGroup;
 
-  private summaryList: SummaryLoaderModel[] = [];
+  private summaryResponse: SummaryResponseModel;
 
   constructor(private activatedRoute: ActivatedRoute,
               private httpService: HttpService,
               private formBuilder: FormBuilder) {
   }
 
-  private addTourIrl: string = '/' + NEW_TOUR_LANDING_URI;
+  // private addTourUrl: string = '/' + NEW_TOUR_LANDING_URI;
   private greetingText: string;
   private userName: string = 'Arnab';
 
   ngOnInit() {
     this.sortForm = this.formBuilder.group({
-      sortBy: [''],
-      sortType: ['']
+      sortBy: ['']
     });
 
     this.sortForm.get('sortBy').setValue('location');
-    this.sortForm.get('sortType').setValue('asc');
 
     this.greeting();
     this.loadSummary();
@@ -59,9 +53,23 @@ export class SummaryComponent implements OnInit {
 
   private loadSummary(): void {
     const routeData: any = this.activatedRoute.snapshot.data['tourSummary'];
-    if(routeData && routeData.content) {
-      (<LocationModel[]>routeData.content).forEach(content => this.summaryList.push(SummaryLoaderModel.extractFromLocation(content)));
+    this.loadSummaryResponse(routeData);
+  }
+
+  private groupData() {
+    const groupBy = this.sortForm.get('sortBy').value;
+
+    this.httpService.getResource(prepareUrl(['summary'], [{'groupBy': groupBy}])).subscribe(data => {
+      this.loadSummaryResponse(data);
+    }, error => {
+      console.log('Cannot load summary data.', error);
+    });
+  }
+
+  private loadSummaryResponse(data: SummaryResponseModel): void {
+    if (data) {
+      this.summaryResponse = SummaryResponseModel.fromData(data);
     }
-    console.log(this.summaryList);
+    console.log('summaryResponse >>> ', this.summaryResponse);
   }
 }

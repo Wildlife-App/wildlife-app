@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,14 +69,7 @@ public class Animal implements Serializable, DBColumnConstants {
             foreignKey = @ForeignKey(name = "animal_food_habit_mapping", value = ConstraintMode.CONSTRAINT))
     private FoodHabitType foodHabitType;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = JOIN_TBL_ANIMAL_LOCATION_MAPPING,
-            joinColumns = @JoinColumn(name = JOIN_COL_LOCATION_ID),
-            inverseJoinColumns = @JoinColumn(name = JOIN_COL_ANIMAL_ID),
-            foreignKey = @ForeignKey(name = "location_animal_mapping", value = ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(name = "animal_location_mapping", value = ConstraintMode.CONSTRAINT))
-    private List<Location> spottingLocations;
-
+    @RestResource(exported = false)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = JOIN_TBL_ANIMAL_TOUR_MAPPING,
             joinColumns = @JoinColumn(name = "tour_id"),

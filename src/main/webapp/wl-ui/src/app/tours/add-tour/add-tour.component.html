@@ -23,7 +23,7 @@
                   (change)="selectLocation()">
             <option value="">-- Select a Location --</option>
             <option *ngFor="let location of allLocations"
-                    [ngValue]="location.getSelfLink()">{{location.locationName}}</option>
+                    [ngValue]="location.locationId">{{location.locationName}}</option>
           </select>
         </div>
       </div>

@@ -3,7 +3,7 @@
     <!--<div class="col-sm-2"></div>-->
     <div class="col-sm-12">
       <div class="panel-hover">
-        <div class="panel panel-primary ">
+        <div class="panel panel-default">
           <div class="panel-heading summary-panel-heading">
             <h3>Tour to {{tour.location.locationName}} from {{tour.startDate | date}} to {{tour.endDate | date}}</h3>
           </div>
@@ -35,7 +35,7 @@
           </div>
           <div class="panel-footer text-center">
             <div class="btn-block">
-              <a class="btn btn-info btn-lg" routerLink="/home" title="Back to summary page"><span
+              <a class="btn btn-default btn-lg" routerLink="/home" title="Back to summary page"><span
                 class="fa fa-hand-o-left"></span>&nbsp;Back</a>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <a class="btn btn-primary btn-lg" title="Edit this tour" (click)="navigateToEditTour()">

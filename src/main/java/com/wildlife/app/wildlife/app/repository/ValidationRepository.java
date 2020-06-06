@@ -4,6 +4,6 @@ import com.wildlife.app.wildlife.app.models.constants.tables.validation.ValidFor
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource(collectionResourceRel = "validations", path = "validations")
+@RepositoryRestResource(collectionResourceRel = "validations", path = "validations", exported = false)
 public interface ValidationRepository extends JpaRepository<ValidForm, String> {
 }

@@ -1,6 +1,5 @@
 import {StateModel} from "./state.model";
 import {BaseResource} from "./base.resource";
-import {TourModel} from "./tour.model";
 
 export class LocationModel extends BaseResource {
   constructor(
@@ -22,7 +21,6 @@ export class LocationModel extends BaseResource {
   locationName: string;
   area: number;
   state: any;
-  tours: TourModel[];
 
   static fromData(data: LocationModel): LocationModel {
     if (!data) return;

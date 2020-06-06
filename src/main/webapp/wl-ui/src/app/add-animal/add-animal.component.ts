@@ -226,8 +226,7 @@ export class AddAnimalComponent implements OnInit {
     this.currentAnimal.animalType = this.animalForm.get('animalType').value;
     this.currentAnimal.existenceStatus = this.animalForm.get('existenceStatus').value;
     this.currentAnimal.foodHabitType = this.animalForm.get('foodHabit').value;
-    this.currentAnimal.addLocation((<LocationModel>this.currentTour.location).getSelfLink());
-    this.currentAnimal.addTour(this.currentTour.getSelfLink());
+    this.currentAnimal.addTour(this.currentTour);
     const imageLink = this.animalForm.get('imageLink').value;
     console.log('imageLink-------', imageLink);
     console.log('Posting data', this.currentAnimal);

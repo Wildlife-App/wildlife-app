@@ -1,12 +1,10 @@
 package com.wildlife.app.wildlife.app.models.constants.tables;
 
-import com.wildlife.app.wildlife.app.models.constants.ConstantData;
 import com.wildlife.app.wildlife.app.models.constants.DBColumnConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -22,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = DBColumnConstants.TBL_CONST_STATE)
-public class State implements Serializable, DBColumnConstants, ConstantData {
+public class State implements Serializable, DBColumnConstants {
     private static final long serialVersionUID = -585452136569454L;
     @Id
     @Column(name = COL_TBL_STATE_CODE)
@@ -38,8 +36,4 @@ public class State implements Serializable, DBColumnConstants, ConstantData {
             foreignKey = @ForeignKey(name = "state_country_mapping", value = ConstraintMode.CONSTRAINT))
     private Country country;
 
-    @Override
-    public boolean isEmpty() {
-        return StringUtils.isEmpty(stateCode) || StringUtils.isEmpty(stateName);
-    }
 }

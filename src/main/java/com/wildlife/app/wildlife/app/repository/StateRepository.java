@@ -8,6 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(
         collectionResourceRel = "states",
         path = "states",
-        excerptProjection = StateProjection.class)
+        excerptProjection = StateProjection.class, exported = false)
 public interface StateRepository extends JpaRepository<State, String> {
 }
