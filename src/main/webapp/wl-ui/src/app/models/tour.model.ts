@@ -2,6 +2,9 @@ import {LocationModel} from "./location.model";
 import {BaseResource} from "./base.resource";
 import {equalDates} from "../app.constants";
 import {ContentModel} from "./content.model";
+import {TourPostModel} from "./post-models/tour-post.model";
+import {stringify} from "querystring";
+import {AnimalModel} from "./animal.model";
 
 export class TourModel extends BaseResource {
   constructor(startDate: Date, endDate: Date, location: LocationModel | string, resourceId?: number, tourId?: number, safaris?: number) {
@@ -12,6 +15,7 @@ export class TourModel extends BaseResource {
     this.endDate = endDate;
     this.location = location;
     this.safaris = safaris;
+    this.spottedAnimals = [];
   }
 
   resourceId?: number;
@@ -22,7 +26,8 @@ export class TourModel extends BaseResource {
   safaris: number;
   content: ContentModel<LocationModel>[];
   locationName: string;
-  tourLocationId: number
+  tourLocationId: number;
+  spottedAnimals: AnimalModel[];
   private _isEmpty: boolean = false;
 
   private empty(): TourModel {
@@ -30,11 +35,18 @@ export class TourModel extends BaseResource {
     return this;
   }
 
+  toPostModel(): TourPostModel {
+    const postModel = TourPostModel.newInstance().TourId(this.tourId).StartDate(this.startDate).EndDate(this.endDate).Safaris(this.safaris);
+    postModel.spottedAnimals.length = 0;
+    if (this.location instanceof LocationModel) {
+      postModel.Location(this.location.getSelfLink());
+    } else {
+      postModel.Location(this.location);
+    }
+    return postModel;
+  }
+
   equals(anotherTour: TourModel): boolean {
-    console.log('Comparing tours - ' +
-      'this.startDate === anotherTour.startDate = ' + (equalDates(this.startDate, anotherTour.startDate))
-      + ' this.endDate === anotherTour.endDate = ' + (equalDates(this.endDate, anotherTour.endDate))
-      + ' this.safaris === anotherTour.safaris = ' + (this.safaris === anotherTour.safaris));
     return anotherTour
       && equalDates(this.startDate, anotherTour.startDate)
       && equalDates(this.endDate, anotherTour.endDate)
@@ -42,7 +54,6 @@ export class TourModel extends BaseResource {
   }
 
   static fromDataForView(data: TourModel): TourModel {
-    console.log('Received data for converting to Tour Model', data);
     let location: LocationModel;
 
     //checking for projection
@@ -60,8 +71,11 @@ export class TourModel extends BaseResource {
       LocationModel.fromData(location),
       data.resourceId, data.resourceId, data.safaris);
 
+    if (data.spottedAnimals && data.spottedAnimals.length > 0) {
+      data.spottedAnimals.forEach(animal => tour.spottedAnimals.push(AnimalModel.fromData(animal)));
+    }
+
     tour.links = tour.fromLinks(data.links);
-    console.log('Received data after converting to Tour Model', tour);
     return tour;
   }
 

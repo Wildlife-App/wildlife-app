@@ -32,7 +32,7 @@ public class CorsAndValidatorConfig implements RepositoryRestConfigurer {
 		System.out.println("Configuring CORS......");
 		config.getCorsRegistry().addMapping("/**")
 				.allowedOrigins("http://localhost:4200")
-				.allowedMethods("GET", "POST", "PUT", "DELETE");
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
 	}
 
 	@Override

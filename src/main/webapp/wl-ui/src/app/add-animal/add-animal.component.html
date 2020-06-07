@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="center-block animal-card">
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
       <div class="panel-heading">
         <h2>{{formTitleText}}</h2>
       </div>
@@ -11,7 +11,7 @@
           <div class="col-sm-6" [formGroup]="recordTypeSelectorForm">
             <ul class="list-inline text-center margin-top-sm">
               <li>
-                <label for="existing"><a>Add existing animal image</a></label>&nbsp;
+                <label for="existing"><a>Link an existing animal to this tour</a></label>&nbsp;
                 <input type="radio" id="existing" formControlName="recordTypeSelector" value="existing">
               </li>
               &nbsp;&nbsp;
@@ -23,17 +23,20 @@
           </div>
         </div>
 
+        <app-message [displayMessage]="displayMessage"></app-message>
+
         <div class="row form-group animal-selector" *ngIf="showDropdown"
              [class.large-padding]="!showForm && showDropdown">
           <div class="col-sm-3 text-right">
             <label for="existingAnimalSelector" class="control-label">Select spotted animal<sup class="required">*</sup></label>
           </div>
-          <div class="col-sm-6" [formGroup] = animalDropDownForm>
+          <div class="col-sm-6" [formGroup]=animalDropDownForm>
             <select class="form-control input-lg background-white" id="existingAnimalSelector"
-              formControlName="selectedAnimal" (change)="loadAnimalForLink()">
-              <option value="-1">--Select One--</option>
-              <option *ngFor="let model of allAnimals; let i=index;"
-                      [value]="i">{{model.animalName}}</option>
+                    formControlName="selectedAnimal">
+              <option value="">--Select One--</option>
+              <option *ngFor="let model of allAnimalsInRecord; let i=index;"
+                      [value]="model.getSelfLink()">{{model.animalName}} ({{model.scientificName}})
+              </option>
             </select>
           </div>
           <div class="col-sm-3"></div>
@@ -183,67 +186,32 @@
             </div>
           </div>
           <!-- Row 6 Complete -->
-          <!-- Row 7 Start -->
-          <div class="row form-group" [ngClass]="{'has-error': formErrors.imageLink}">
-            <div class="col-sm-3 text-right">
-              <label for="resourceImage" class="control-label">Link An Image<sup class="required">*</sup></label>
-            </div>
-            <div class="col-sm-6">
-              <div class="input-group cust">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-camera"></i></span>
-                <input type="file" accept="image/*"
-                       (change)="selectImage($event)"
-                       class="form-control input-lg background-white" id="resourceImage"
-                       formControlName="imageLink"
-                       placeholder="Link an image"
-                       (blur)="validateForm(animalForm)">
-                <span class="input-group-addon">
-                  <button class="btn btn-sm btn-primary"
-                          [disabled]="(animalForm.get('imageLink').pristine || animalForm.get('imageLink').invalid) || !this.fileToBeUploaded  ? 'disabled' : null"
-                          (click)="uploadImage()">
-                    <i *ngIf="!uploadInProgress" class="glyphicon glyphicon-upload"></i>
-                    <i *ngIf="uploadInProgress" class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
-                    Upload Image
-                  </button>
-                </span>
-              </div>
-              <!--
-              (click)="fileInput.value ? uploadImage(fileInput.value) : fileInput.click()"
-              (click)="fileInput.click()"
-                        [value]="fileInput.value"
-              <input type="file" formControlName="imageLink" class="hidden" #fileInput>
-              -->
-            </div>
-
-            <div class="col-sm-3">
-              <span *ngIf="formErrors.imageLink">
-                <small class="float-right required">{{formErrors.imageLink}}</small>
-              </span>
-              <span *ngIf="uploadStatus && uploadStatus === 'success'" class="padding-md">
-                <span class="glyphicon glyphicon-ok font-x-lg success-icon"></span>
-              </span>
-            </div>
-          </div>
-          <!-- Row 7 Complete -->
-          <div class="row" *ngIf="imgUrl">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-              <img [src]="imgUrl" height="200">
-            </div>
-          </div>
         </div>
       </div>
       <div class="panel-footer text-center">
         <div class="btn-group">
-          <button class="btn btn-lg btn-info" [routerLink]="['/tours', currentTour.tourId]">
-            <span class="glyphicon glyphicon-backward"></span> Details</button>
+          <button class="btn btn-lg btn-default" [routerLink]="['/tours', currentTour.tourId]">
+            <span class="glyphicon glyphicon-backward"></span> Details
+          </button>
           <button class="btn btn-lg btn-default" (click)="resetForm()"
+                  *ngIf="!showDropdown"
                   [attr.disabled]="animalForm.pristine ? 'disabled' : null">
             <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset
           </button>
           <button class="btn btn-lg btn-primary" (click)="saveAnimal()"
+                  *ngIf="!showDropdown"
                   [attr.disabled]="animalForm.pristine || !animalForm.valid ? 'disabled' : null">
             <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save
+          </button>
+          <button class="btn btn-lg btn-primary" (click)="saveAnimal(true)"
+                  *ngIf="!showDropdown"
+                  [attr.disabled]="animalForm.pristine || !animalForm.valid ? 'disabled' : null">
+            <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Save and Add
+          </button>
+          <button class="btn btn-lg btn-primary"
+                  *ngIf="showDropdown" (click)="linkAnimal()"
+                  [attr.disabled]="this.animalDropDownForm.get('selectedAnimal').value === '' ? 'disabled' : null">
+            <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;&nbsp;Link
           </button>
         </div>
         <div class="clearfix"></div>

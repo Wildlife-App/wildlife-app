@@ -316,8 +316,26 @@ div.title h1 {
   color: red !important;
 }
 
+.text-bold {
+  font-weight: bold;
+}
+
+.test-border {
+  border: 1px solid black;
+}
+
 body {
   background-color: rgba(32, 32, 32, 0.1);
+}
+
+.wl-thumbnail {
+  height: 50px;
+}
+
+.thumbnail img {
+  height:250px;
+  width: auto;
+  image-resolution: snap;
 }
 
 /*Screen resolution upto 1920px or 1080p*/

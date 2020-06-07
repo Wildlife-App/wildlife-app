@@ -28,5 +28,12 @@ public class ExceptionHandlerAdvice {
         });
         return new ResponseEntity<>(errorModel, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(value = AppLoadingException.class)
+    public ResponseEntity<Object> handleError(AppLoadingException e) {
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.addMessage("APP","Unable to handle your request");
+        return new ResponseEntity<>(errorModel, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 

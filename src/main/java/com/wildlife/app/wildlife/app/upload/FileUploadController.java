@@ -17,11 +17,22 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadController {
     private static final Logger LOG = LoggerFactory.getLogger(FileUploadController.class);
 
-    private FileUploadService fileUploadService;
+    private ResourceImageService fileUploadService;
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile multipartFile) {
-        LOG.info("Received file for uploading {}", multipartFile);
-        return new ResponseEntity<>(fileUploadService.uploadFile(multipartFile), HttpStatus.CREATED);
+    public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile file,
+                                         @RequestParam("caption") String caption,
+                                         @RequestParam("resourceType") String resourceType,
+                                         @RequestParam("animalId") int animalId,
+                                         @RequestParam("tourId") int tourId) {
+        FileUploadRequest request = FileUploadRequest.builder()
+                .animalId(animalId)
+                .caption(caption)
+                .file(file)
+                .resourceType(resourceType)
+                .tourId(tourId)
+                .build();
+        LOG.info("Received file for uploading {}", request);
+        return new ResponseEntity<>(fileUploadService.uploadFile(request), HttpStatus.CREATED);
     }
 }

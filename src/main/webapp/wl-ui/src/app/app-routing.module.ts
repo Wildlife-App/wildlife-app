@@ -20,17 +20,18 @@ import {
 import {TourDetailsComponent} from "./tours/tour-details/tour-details.component";
 import {TourSelectLocationComponent} from "./tours/tour-select-location/tour-select-location.component";
 import {AddTourComponent} from "./tours/add-tour/add-tour.component";
-import {AddTourLocationsResolveRouteGuardService} from "./route-guards/add-tour-locations-resolve-route-guard.service";
+import {AddTourLocationsResolveRouteGuardService} from "./tours/add-tour/route-guards/add-tour-locations-resolve-route-guard.service";
 import {EditTourResolveRouteGuardService} from "./route-guards/edit-tour-resolve-route-guard.service";
-import {AnimalLoadAnimalTypeResolveService} from "./route-guards/animal-load-animal-type-resolve.service";
-import {AnimalLoadFoodHabitResolveService} from "./route-guards/animal-load-food-habit-resolve.service";
-import {AnimalLoadExistenceStatusResolveService} from "./route-guards/animal-load-existence-status-resolve.service";
-import {CanDeactivateAnimalComponentService} from "./route-guards/can-deactivate-animal-component.service";
-import {AnimalLoadTourResolveService} from "./route-guards/animal-load-tour-resolve.service";
-import {AnimalLoadAllAnimalsResolveService} from "./route-guards/animal-load-all-animals-resolve.service";
+import {AnimalLoadAnimalTypeResolveService} from "./add-animal/route-guards/animal-load-animal-type-resolve.service";
+import {AnimalLoadFoodHabitResolveService} from "./add-animal/route-guards/animal-load-food-habit-resolve.service";
+import {AnimalLoadExistenceStatusResolveService} from "./add-animal/route-guards/animal-load-existence-status-resolve.service";
+import {CanDeactivateAnimalComponentService} from "./add-animal/route-guards/can-deactivate-animal-component.service";
+import {AnimalLoadTourResolveService} from "./add-animal/route-guards/animal-load-tour-resolve.service";
+import {AnimalLoadAllAnimalsResolveService} from "./add-animal/route-guards/animal-load-all-animals-resolve.service";
 import {TourDetailsTourResolverService} from "./tours/tour-details/route-guards/tour-details-tour-resolver.service";
-import {TourDetailsSpottedAnimalsResolverService} from "./tours/tour-details/route-guards/tour-details-spotted-animals-resolver.service";
 import {SummaryLoadToursResolveService} from "./summary/route-guards/summary-load-tours-resolve.service";
+import {TourDetailsSpottedAnimalsResolverService} from "./tours/tour-details/route-guards/tour-details-spotted-animals-resolver.service";
+import {AnimalLoadSpottedAnimalsResolveService} from "./add-animal/route-guards/animal-load-spotted-animals-resolve.service";
 
 const routes: Routes = [
   {
@@ -63,7 +64,8 @@ const routes: Routes = [
       animalTypes: AnimalLoadAnimalTypeResolveService,
       foodHabits: AnimalLoadFoodHabitResolveService,
       existenceStatuses: AnimalLoadExistenceStatusResolveService,
-      tour: AnimalLoadTourResolveService
+      tour: AnimalLoadTourResolveService,
+      spottedAnimals: AnimalLoadSpottedAnimalsResolveService
     },
     canDeactivate: [CanDeactivateAnimalComponentService]
   },

@@ -3,14 +3,18 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {ValidatorUtils} from "../utils/validator-utils";
 import {HttpService} from "../http.service";
 import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
-import {DATE_FORMAT, prepareUrl} from "../app.constants";
-import {ActivatedRoute} from "@angular/router";
+import {DATE_FORMAT, doErrorFormalities, prepareUrl} from "../app.constants";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AnimalTypeModel} from "../models/animal-type.model";
 import {FoodHabitModel} from "../models/food-habit.model";
 import {ExistenceStatusModel} from "../models/existence-status.model";
 import {AnimalModel} from "../models/animal.model";
 import {TourModel} from "../models/tour.model";
 import {LocationModel} from "../models/location.model";
+import {AnimalPostModel} from "../models/post-models/animal-post.model";
+import {FileUploadModel} from "../models/post-models/file-upload.model";
+import {TourPostModel} from "../models/post-models/tour-post.model";
+import {DisplayMessageModel} from "../models/display.message.model";
 
 @Component({
   selector: 'app-add-animal',
@@ -24,7 +28,7 @@ export class AddAnimalComponent implements OnInit {
   private foodHabitList: FoodHabitModel[] = [];
   private animalTypeList: AnimalTypeModel[] = [];
   private existenceStatusList: ExistenceStatusModel[] = [];
-  private currentAnimal: AnimalModel = AnimalModel.createEmpty();
+  private currentAnimal: AnimalPostModel;
   private formTitleText: string = this.defaultFormTitleText;
   private fileToBeUploaded: File;
   private imgUrl: string;
@@ -32,14 +36,16 @@ export class AddAnimalComponent implements OnInit {
   private uploadInProgress: boolean;
   private recordTypeSelectorForm: FormGroup;
   private animalDropDownForm: FormGroup;
-  private allAnimals: AnimalModel[] = [];
+  private allAnimalsInRecord: AnimalModel[] = [];
   private showDropdown: boolean;
   private showForm: boolean;
-  private currentTour: TourModel;
+  private currentTour: TourPostModel;
   private linking: boolean;
+  private displayMessage: DisplayMessageModel = DisplayMessageModel.create();
 
   constructor(private formBuilder: FormBuilder,
               private httpService: HttpService,
+              private router: Router,
               private activatedRoute: ActivatedRoute) {
     this.configDate();
     this.fetchAnimalTypes();
@@ -92,8 +98,9 @@ export class AddAnimalComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.fetchAllAnimals();
     this.resolveTourIfExists();
+    this.fetchAllAnimals();
+    // this.fetchSpottedAnimals();
 
     this.animalForm.valueChanges.subscribe(data => {
       console.log('Value changed', data);
@@ -108,13 +115,11 @@ export class AddAnimalComponent implements OnInit {
         this.resetForm();
         this.linking = false;
       } else {
-        this.animalDropDownForm.get('selectedAnimal').setValue('-1');
+        this.animalDropDownForm.get('selectedAnimal').setValue('');
       }
     });
 
     this.animalDropDownForm.valueChanges.subscribe(data => {
-      console.log('Data = ', data);
-      this.loadAnimalForLink();
     });
   }
 
@@ -155,29 +160,41 @@ export class AddAnimalComponent implements OnInit {
 
   private resolveTourIfExists(): void {
     const routeData: any = this.activatedRoute.snapshot.data['tour'];
-    console.log('resolveTourIfExists :: ', routeData);
     if (routeData) {
       const tour: TourModel = TourModel.fromDataForView(routeData);
-      console.log('Adding animal for tour', tour);
       let location: LocationModel;
+
       if (tour.location instanceof LocationModel) {
         location = <LocationModel>tour.location;
         this.formTitleText = 'New spotted animal at ' + location.locationName
           + ' (' + tour.startDate + ' to ' + tour.endDate + ')';
-
-        this.currentTour = tour;
       }
+      this.currentTour = tour.toPostModel();
     } else {
       this.formTitleText = this.defaultFormTitleText;
     }
 
   }
 
+  private fetchSpottedAnimals(): void {
+    const spottedAnimalsData: any = this.activatedRoute.snapshot.data['spottedAnimals'];
+    console.log('spottedAnimals fetched', spottedAnimalsData);
+    if (spottedAnimalsData.content && spottedAnimalsData.content.length > 0 && spottedAnimalsData.content[0].animalName) {
+      (<AnimalModel[]>spottedAnimalsData.content).forEach(animal => {
+        const animalObj = AnimalModel.fromData(animal);
+        this.currentTour.Animal(animalObj.getSelfLink());
+      });
+    }
+  }
+
   private fetchAllAnimals(): void {
     const allAnimalData: any = this.activatedRoute.snapshot.data['allAnimals'];
     console.log('allAnimalData fetched', allAnimalData);
     if (AddAnimalComponent.hasContent(allAnimalData)) {
-      (<AnimalModel[]>allAnimalData.content).forEach(animal => this.allAnimals.push(AnimalModel.fromData(animal)));
+      (<AnimalModel[]>allAnimalData.content).forEach(animal => {
+        const animalObj = AnimalModel.fromData(animal);
+        this.allAnimalsInRecord.push(animalObj);
+      });
     }
   }
 
@@ -220,13 +237,14 @@ export class AddAnimalComponent implements OnInit {
   }
 
   prepareAnimalObjectForSave(): void {
-    this.currentAnimal.animalName = this.animalForm.get('animalName').value;
-    this.currentAnimal.scientificName = this.animalForm.get('scientificName').value;
-    this.currentAnimal.animalGender = this.animalForm.get('gender').value;
-    this.currentAnimal.animalType = this.animalForm.get('animalType').value;
-    this.currentAnimal.existenceStatus = this.animalForm.get('existenceStatus').value;
-    this.currentAnimal.foodHabitType = this.animalForm.get('foodHabit').value;
-    this.currentAnimal.addTour(this.currentTour);
+    this.currentAnimal = AnimalPostModel.newInstance()
+      .AnimalName(this.animalForm.get('animalName').value)
+      .ScientificName(this.animalForm.get('scientificName').value)
+      .AnimalGender(this.animalForm.get('gender').value)
+      .AnimalType(this.animalForm.get('animalType').value)
+      .ExistenceStatus(this.animalForm.get('existenceStatus').value)
+      .FoodHabitType(this.animalForm.get('foodHabit').value);
+
     const imageLink = this.animalForm.get('imageLink').value;
     console.log('imageLink-------', imageLink);
     console.log('Posting data', this.currentAnimal);
@@ -234,14 +252,57 @@ export class AddAnimalComponent implements OnInit {
     this.resetForm();
   }
 
-  private saveAnimal() {
+  private saveAnimal(addMore?: boolean) {
     this.prepareAnimalObjectForSave();
 
     this.httpService.postResource(prepareUrl(['animals']), this.currentAnimal).subscribe(data => {
       console.log('Saved animal', data);
+      const animalObj = AnimalModel.fromData(data);
+      this.allAnimalsInRecord.push(animalObj);
+
+      this.currentTour.Animal(animalObj.getSelfLink());
+
+      console.log('this.currentTour {{{{{{{}}}}}}', this.currentTour);
+      this.httpService.patchResource(prepareUrl(['tours', this.currentTour.tourId.toString()]), this.currentTour).subscribe(tour => {
+        console.log('After update', tour);
+      });
+
+      if (!addMore) {
+        this.displayMessage.newInfoMessage('Animal added and linked to the tour. Navigating to the details page..');
+        this.navigate();
+      }
+
     }, error => {
       console.log('Error occurred', error);
+      doErrorFormalities(error, this.formErrors);
     });
+  }
+
+  private linkAnimal(): void {
+    const selectedAnimal: string = this.animalDropDownForm.get('selectedAnimal').value;
+
+    this.currentTour.spottedAnimals.length = 0;
+
+    this.fetchSpottedAnimals();
+    this.currentTour.Animal(selectedAnimal);
+
+    console.log('Patching verification >>>>> ', this.allAnimalsInRecord, this.currentTour.spottedAnimals);
+
+    this.httpService.patchResource(prepareUrl(['tours', this.currentTour.tourId.toString()]), this.currentTour).subscribe(tour => {
+      this.animalDropDownForm.get('selectedAnimal').setValue('');
+      console.log('After update', tour);
+      this.displayMessage.newInfoMessage('Animal linked to the tour. Navigating to the details page..');
+      this.navigate();
+    });
+  }
+
+  private navigate(): void {
+    const tourId = this.currentTour.tourId;
+    this.init();
+    setTimeout(() => {
+        this.router.navigate(['/tours', tourId]).then(r => console.log('After navigate', r));
+      },
+      3000);
   }
 
   private resolveClass(selector: string): string {
@@ -268,20 +329,6 @@ export class AddAnimalComponent implements OnInit {
     this.uploadStatus = undefined;
   }
 
-  private selectImage(event): void {
-    this.fileToBeUploaded = event.target.files[0];
-    console.log('Val = ', this.fileToBeUploaded);
-    const mimeType = this.fileToBeUploaded.type;
-
-    if (mimeType.match(/image\/*/)) {
-      const reader = new FileReader();
-      reader.readAsDataURL(this.fileToBeUploaded);
-      reader.onload = (_event) => {
-        this.imgUrl = <string>reader.result;
-      }
-    }
-  }
-
   private uploadImage(): void {
     if (!this.fileToBeUploaded) {
       console.log('Nothing to be uploaded');
@@ -290,10 +337,10 @@ export class AddAnimalComponent implements OnInit {
     this.animalForm.get('imageLink').setValue('');
     const formData = new FormData();
     formData.append('file', this.fileToBeUploaded, this.fileToBeUploaded.name);
+    const request: FileUploadModel = new FileUploadModel(this.fileToBeUploaded, this.fileToBeUploaded.name, 'A', 0, 0);
     this.uploadInProgress = true;
     this.httpService.postResource(prepareUrl(['upload']), formData).subscribe(data => {
       this.uploadStatus = 'success';
-      this.currentAnimal.addResourceImage(data.id, data.fullUrl, this.currentTour.tourId);
       console.log('currentAnimal ', this.currentAnimal);
 
     }, error => {
@@ -323,30 +370,9 @@ export class AddAnimalComponent implements OnInit {
     return this.animalForm;
   }
 
-  private loadAnimalForLink(): void {
-    const selectedAnimalIndex = +this.animalDropDownForm.get('selectedAnimal').value;
-    console.log('selectedAnimalIndex = ', (selectedAnimalIndex > -1));
-    if (selectedAnimalIndex > -1) {
-      this.linking = true;
-      const selectedAnimal = this.allAnimals[selectedAnimalIndex];
-
-      console.log('Selected animal:', selectedAnimal);
-      const animalType = <AnimalTypeModel>selectedAnimal.animalType;
-      const foodHabitType = <FoodHabitModel>selectedAnimal.foodHabitType;
-      const existenceStatus = <ExistenceStatusModel>selectedAnimal.existenceStatus;
-
-      this.animalForm.get('animalName').setValue(selectedAnimal.animalName);
-      this.animalForm.get('scientificName').setValue(selectedAnimal.scientificName);
-      this.animalForm.get('gender').setValue(selectedAnimal.animalGender);
-
-      this.animalForm.get('animalType').setValue(this.animalTypeList.find(t => t.animalTypeId === animalType.animalTypeId).getSelfLink());
-      this.animalForm.get('foodHabit').setValue(this.foodHabitList.find(t => t.foodHabitTypeId === foodHabitType.foodHabitTypeId).getSelfLink());
-      this.animalForm.get('existenceStatus').setValue(this.existenceStatusList.find(t => t.existenceStatusId === existenceStatus.existenceStatusId).getSelfLink());
-
-      this.showForm = true;
-    } else {
-      this.showForm = false;
-    }
+  init() {
+    this.allAnimalsInRecord.length = 0;
+    this.currentTour.reset();
   }
 }
 

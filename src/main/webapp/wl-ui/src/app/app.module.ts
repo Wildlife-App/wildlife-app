@@ -22,17 +22,18 @@ import {TourSelectLocationComponent} from "./tours/tour-select-location/tour-sel
 import {TourDetailsComponent} from "./tours/tour-details/tour-details.component";
 import {AddTourComponent} from "./tours/add-tour/add-tour.component";
 import {EditTourResolveRouteGuardService} from "./route-guards/edit-tour-resolve-route-guard.service";
-import {DataLoaderService} from "./data-loader/data-loader.service";
-import {AddTourLocationsResolveRouteGuardService} from "./route-guards/add-tour-locations-resolve-route-guard.service";
-import {AnimalLoadAnimalTypeResolveService} from "./route-guards/animal-load-animal-type-resolve.service";
-import {AnimalLoadExistenceStatusResolveService} from "./route-guards/animal-load-existence-status-resolve.service";
-import {AnimalLoadFoodHabitResolveService} from "./route-guards/animal-load-food-habit-resolve.service";
-import {CanDeactivateAnimalComponentService} from "./route-guards/can-deactivate-animal-component.service";
-import {AnimalLoadTourResolveService} from "./route-guards/animal-load-tour-resolve.service";
-import {AnimalLoadAllAnimalsResolveService} from "./route-guards/animal-load-all-animals-resolve.service";
+import {AddTourLocationsResolveRouteGuardService} from "./tours/add-tour/route-guards/add-tour-locations-resolve-route-guard.service";
+import {AnimalLoadAnimalTypeResolveService} from "./add-animal/route-guards/animal-load-animal-type-resolve.service";
+import {AnimalLoadExistenceStatusResolveService} from "./add-animal/route-guards/animal-load-existence-status-resolve.service";
+import {AnimalLoadFoodHabitResolveService} from "./add-animal/route-guards/animal-load-food-habit-resolve.service";
+import {CanDeactivateAnimalComponentService} from "./add-animal/route-guards/can-deactivate-animal-component.service";
+import {AnimalLoadTourResolveService} from "./add-animal/route-guards/animal-load-tour-resolve.service";
+import {AnimalLoadAllAnimalsResolveService} from "./add-animal/route-guards/animal-load-all-animals-resolve.service";
 import {TourDetailsTourResolverService} from "./tours/tour-details/route-guards/tour-details-tour-resolver.service";
-import {TourDetailsSpottedAnimalsResolverService} from "./tours/tour-details/route-guards/tour-details-spotted-animals-resolver.service";
 import {SummaryLoadToursResolveService} from "./summary/route-guards/summary-load-tours-resolve.service";
+import {TourDetailsSpottedAnimalsResolverService} from "./tours/tour-details/route-guards/tour-details-spotted-animals-resolver.service";
+import {AnimalLoadSpottedAnimalsResolveService} from "./add-animal/route-guards/animal-load-spotted-animals-resolve.service";
+import {BsModalService, ModalModule} from "ngx-bootstrap/modal";
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {SummaryLoadToursResolveService} from "./summary/route-guards/summary-loa
     HttpClientModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
+    ModalModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     BrowserAnimationsModule,
   ],
@@ -63,12 +65,15 @@ import {SummaryLoadToursResolveService} from "./summary/route-guards/summary-loa
     CanDeactivateNewPlaceService,
     EditTourResolveRouteGuardService,
     AddTourLocationsResolveRouteGuardService,
+
     AnimalLoadAnimalTypeResolveService,
     AnimalLoadFoodHabitResolveService,
     AnimalLoadExistenceStatusResolveService,
     CanDeactivateAnimalComponentService,
     AnimalLoadTourResolveService,
+    AnimalLoadSpottedAnimalsResolveService,
     AnimalLoadAllAnimalsResolveService,
+
     TourDetailsTourResolverService,
     TourDetailsSpottedAnimalsResolverService,
     SummaryLoadToursResolveService

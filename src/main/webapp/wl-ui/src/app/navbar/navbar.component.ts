@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit {
     };
 
     this.menus.push(homeMenu);
-    this.menus.push(addMenu);
+    // this.menus.push(addMenu);
     this.menus.push(locationMenu);
   }
 }

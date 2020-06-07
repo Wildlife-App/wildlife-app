@@ -34,7 +34,9 @@
               </div>
               <div id="panelBody{{i}}" class="panel-body collapse in">
                 <div class="well well-sm font-md" *ngFor="let tour of summary.tours">
-                    <a [routerLink]="['/tours', tour.tourId]">From {{tour.startDate | date}} to {{tour.endDate | date}}</a>
+                  <a [routerLink]="['/tours', tour.tourId]">From {{tour.startDate | date}} to {{tour.endDate | date}}
+                  <span class="pull-right">{{tour.spottedAnimals.length}} spotted animal{{tour.spottedAnimals.length > 1 ? 's' : ''}}</span>
+                  </a>
                 </div>
               </div>
             </div>

@@ -17,7 +17,6 @@ export class ValidatorUtils {
         && (abstractControl.touched || abstractControl.dirty)) {
         const messages = validationMessages[key];
         for (const errorKey in abstractControl.errors) {
-          console.log('Logging errorKey:', errorKey);
           if (errorKey) {
             formErrors[key] += messages[errorKey] + ' ';
           }
@@ -27,7 +26,6 @@ export class ValidatorUtils {
         ValidatorUtils.validateForm(abstractControl, validationMessages, formErrors);
       }
     });
-    console.log('Logging errors: ', formErrors);
   }
 
   static NameValidator(control: AbstractControl): { [key: string]: any } {
@@ -49,7 +47,7 @@ export class ValidatorUtils {
     if (INVALID_CHAR_LIST.indexOf(firstChar) > -1) {
       return returnIfInvalid;
     }
-    
+
     for(let char of INVALID_CHAR_LIST) {
       if (name.indexOf(char) > -1) {
         return returnIfInvalid;

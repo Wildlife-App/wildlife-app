@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {AddAnimalComponent} from "../add-animal/add-animal.component";
+import {AddAnimalComponent} from "../add-animal.component";
 import {Observable} from "rxjs";
-import {HttpService} from "../http.service";
-import {ANIMAL_EXCERPT, prepareUrl} from "../app.constants";
+import {HttpService} from "../../http.service";
+import {ANIMAL_EXCERPT, prepareUrl} from "../../app.constants";
 
 @Injectable()
 export class AnimalLoadAllAnimalsResolveService implements Resolve<AddAnimalComponent> {

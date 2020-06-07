@@ -5,9 +5,9 @@ import {NAME_MAX_LENGTH, NAME_MIN_LENGTH, ValidatorUtils} from "../utils/validat
 import {Router} from "@angular/router";
 import {StateModel} from "../models/state.model";
 import {CountryModel} from "../models/country.model";
-import {LocationModel} from "../models/location.model";
 import {DisplayMessageModel} from "../models/display.message.model";
 import {NEW_TOUR_EXISTING_LOCATION_URI, NEW_TOUR_LANDING_URI, prepareUrl} from "../app.constants";
+import {LocationPostModel} from "../models/post-models/location-post.model";
 
 let httpServiceInject: HttpService;
 
@@ -92,9 +92,7 @@ export class LocationComponent implements OnInit {
 
       console.log('Fetched countries', allCountries);
       allCountries.forEach(country => {
-        if (country.states && country.states.length > 0) {
-          this.countries.push(CountryModel.fromCountry(country));
-        }
+        this.countries.push(CountryModel.fromCountry(country));
       });
       this.locationForm.get('stateCountryGroup').get('country').setValue('');
       this.fetchStates();
@@ -104,28 +102,31 @@ export class LocationComponent implements OnInit {
   }
 
   fetchStates() {
-    const countryCode: string = this.locationForm.get('stateCountryGroup').get('country').value;
-    console.log('Selected countryCode: ', countryCode);
-    if (countryCode === '') {
+    const countryLink: string = this.locationForm.get('stateCountryGroup').get('country').value;
+    console.log('Selected countryLink: ', countryLink);
+    if (countryLink === '') {
       return;
     }
-    const selectedCountry: CountryModel = this.countries.find(country =>
-      countryCode === country.internationalCode);
     this.states.length = 0;
-    selectedCountry.states.forEach(state => this.states.push(StateModel.fromState(state)));
-    this.locationForm.get('stateCountryGroup').get('state').setValue('');
-    console.log('States of this country are: ', selectedCountry.states);
+
+    this.httpService.getResource(prepareUrl(['states', 'search', 'findAllByCountry'], [{'country': countryLink}])).subscribe(data => {
+      if (data && data.content && data.content.length > 0) {
+        (<StateModel[]>data.content).forEach(item => this.states.push(StateModel.fromState(item)));
+      }
+    }, error => {
+      console.log('Unable to fetch states', error);
+    });
   }
 
   saveLocation() {
     const selectedState: string = this.locationForm.get('stateCountryGroup').get('state').value;
     const locationName: string = this.locationForm.get('locationName').value;
     const area: number = this.locationForm.get('area').value;
-    const location: LocationModel = new LocationModel(locationName, area, selectedState);
+    const location: LocationPostModel = LocationPostModel.newInstance().Area(area).LocationName(locationName).State(selectedState);
     this.postData(location);
   }
 
-  postData(location: LocationModel): void {
+  postData(location: LocationPostModel): void {
     console.log('Posting location: ', location);
     this.httpService.postResource(prepareUrl(['/locations']), location).subscribe(
       data => {

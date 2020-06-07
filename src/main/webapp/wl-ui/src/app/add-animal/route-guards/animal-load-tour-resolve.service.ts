@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {TourModel} from "../models/tour.model";
+import {TourModel} from "../../models/tour.model";
 import {Observable} from "rxjs";
-import {HttpService} from "../http.service";
-import {prepareUrl} from "../app.constants";
+import {HttpService} from "../../http.service";
+import {prepareUrl} from "../../app.constants";
 
 @Injectable()
 export class AnimalLoadTourResolveService implements Resolve<TourModel> {

@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
-import {FoodHabitModel} from "../models/food-habit.model";
+import {FoodHabitModel} from "../../models/food-habit.model";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
 import {Observable} from "rxjs";
-import {HttpService} from "../http.service";
-import {prepareUrl} from "../app.constants";
+import {HttpService} from "../../http.service";
+import {prepareUrl} from "../../app.constants";
 
 @Injectable()
 export class AnimalLoadFoodHabitResolveService implements Resolve<FoodHabitModel[]> {

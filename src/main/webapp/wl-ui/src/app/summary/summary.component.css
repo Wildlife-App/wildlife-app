@@ -48,6 +48,10 @@ a.panel-title-text:hover {
   min-height: 90vh;
 }
 
+.well-font {
+  font-size: 18px;
+}
+
 @media screen and (max-height: 1080px) {
   a > .panel-hover:hover {
     font-weight: bold;
@@ -70,5 +74,9 @@ a.panel-title-text:hover {
 
   .summary-panel-heading {
     font-size: 14px;
+  }
+
+  .well-font {
+    font-size: 16px;
   }
 }

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "states")
 @Entity(name = DBColumnConstants.TBL_CONST_COUNTRY)
 public class Country implements Serializable, DBColumnConstants {
     private static final long serialVersionUID = -585452136569454L;
@@ -31,5 +29,4 @@ public class Country implements Serializable, DBColumnConstants {
 
     @Column(name = COL_TBL_COUNTRY_ISD)
     private String isdCode;
-
 }

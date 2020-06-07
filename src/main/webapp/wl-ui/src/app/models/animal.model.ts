@@ -31,12 +31,11 @@ export class AnimalModel extends BaseResource {
   resourceImages: ResourceImageModel[];
   spottedInTours: TourModel[];
 
-  addResourceImage(id: number, url: string, tourId: number): void {
+  addResourceImage(image: ResourceImageModel): void {
     if (!this.resourceImages) {
       this.resourceImages = [];
     }
-    const resourceImage: ResourceImageModel = new ResourceImageModel((id ? id : 0), url, 'animal', this.animalId, tourId);
-    this.resourceImages.push(resourceImage);
+    this.resourceImages.push(image);
   }
 
   addTour(tour: TourModel): void {
@@ -45,6 +44,10 @@ export class AnimalModel extends BaseResource {
     }
 
     this.spottedInTours.push(tour);
+  }
+
+  hasImage(): boolean {
+    return this.resourceImages && this.resourceImages.length > 0;
   }
 
   static createEmpty(): AnimalModel {

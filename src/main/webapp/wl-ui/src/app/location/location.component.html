@@ -39,7 +39,7 @@
                     (change)="fetchStates()" (blur)="validateForm(locationForm)">
               <option value="">-- Select Country --</option>
               <option *ngFor="let country of countries"
-                      [value]="country.internationalCode">{{country.countryName}}</option>
+                      [value]="country.getSelfLink()">{{country.countryName}}</option>
             </select>
           </div>
         </div>

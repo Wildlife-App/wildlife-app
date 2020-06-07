@@ -20,13 +20,16 @@ export class LocationModel extends BaseResource {
   locationId?: number;
   locationName: string;
   area: number;
-  state: any;
+  state: StateModel;
 
   static fromData(data: LocationModel): LocationModel {
     if (!data) return;
     const locationModel = new LocationModel(data.locationName, +data.area,
-      StateModel.fromState(<StateModel>data.state).getSelfLink(),
+      {},
       +data.resourceId, +data.resourceId);
+    if(data.state) {
+      locationModel.state = StateModel.fromState(<StateModel>data.state);
+    }
     locationModel.links = locationModel.fromLinks(data.links);
     return locationModel;
   }

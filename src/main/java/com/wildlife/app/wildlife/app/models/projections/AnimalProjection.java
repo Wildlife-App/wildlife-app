@@ -1,14 +1,11 @@
 package com.wildlife.app.wildlife.app.models.projections;
 
 import com.wildlife.app.wildlife.app.models.Animal;
-import com.wildlife.app.wildlife.app.models.ResourceImage;
 import com.wildlife.app.wildlife.app.models.constants.tables.AnimalType;
 import com.wildlife.app.wildlife.app.models.constants.tables.ExistenceStatus;
 import com.wildlife.app.wildlife.app.models.constants.tables.FoodHabitType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
-
-import java.util.List;
 
 @Projection(name = "animalProjection", types = Animal.class)
 public interface AnimalProjection {
@@ -26,6 +23,4 @@ public interface AnimalProjection {
     ExistenceStatus getExistenceStatus();
 
     FoodHabitType getFoodHabitType();
-
-    List<ResourceImage> getResourceImages();
 }

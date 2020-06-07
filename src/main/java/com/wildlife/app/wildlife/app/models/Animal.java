@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.rest.core.annotation.RestResource;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -19,12 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Builder
@@ -69,19 +63,8 @@ public class Animal implements Serializable, DBColumnConstants {
             foreignKey = @ForeignKey(name = "animal_food_habit_mapping", value = ConstraintMode.CONSTRAINT))
     private FoodHabitType foodHabitType;
 
-    @RestResource(exported = false)
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = JOIN_TBL_ANIMAL_TOUR_MAPPING,
-            joinColumns = @JoinColumn(name = "tour_id"),
-            inverseJoinColumns = @JoinColumn(name = "animal_id"),
-            foreignKey = @ForeignKey(name = "tour_animal_mapping", value = ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(name = "animal_tour_mapping", value = ConstraintMode.CONSTRAINT))
-    private List<Tour> spottedInTours;
-
     public int getResourceId(){
         return this.animalId;
     }
 
-    @OneToMany(mappedBy = "animal")
-    private List<ResourceImage> resourceImages;
 }

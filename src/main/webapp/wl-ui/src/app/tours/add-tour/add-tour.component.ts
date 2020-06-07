@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {LocationModel} from "../../models/location.model";
 import {DisplayMessageModel} from "../../models/display.message.model";
 import {BsDatepickerConfig} from "ngx-bootstrap/datepicker";
@@ -9,6 +9,7 @@ import {MAX_DATE, MIN_DATE, ValidatorUtils} from "../../utils/validator-utils";
 import {DATE_FORMAT, HOME_URI, prepareUrl} from "../../app.constants";
 import {TourModel} from "../../models/tour.model";
 import {parseDate} from "ngx-bootstrap/chronos";
+import {TourPostModel} from "../../models/post-models/tour-post.model";
 
 @Component({
   selector: 'app-add-tour',
@@ -27,6 +28,7 @@ export class AddTourComponent implements OnInit {
   private isSubmittable: boolean = false;
   private fromDatePickerConfig: Partial<BsDatepickerConfig>;
   private toDatePickerConfig: Partial<BsDatepickerConfig>;
+  private selectedLocationInitValue: string = '';
 
   private validationMessages = {
     'selectedLocation': {
@@ -83,7 +85,6 @@ export class AddTourComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resolveRouteVariables();
     this.setData();
 
     this.tourForm.valueChanges.subscribe(() => {
@@ -117,6 +118,16 @@ export class AddTourComponent implements OnInit {
     if (routeData && routeData.page && routeData.page.totalElements > 0) {
       const fetchedLocations: LocationModel[] = this.activatedRoute.snapshot.data['locations'].content;
       fetchedLocations.forEach(fetchedLocation => this.allLocations.push(LocationModel.fromData(fetchedLocation)));
+      this.isRedirected = false;
+      this.tourForm.get('selectedLocation').setValue('');
+    }
+    if (routeData && routeData.locationName && routeData.locationName.length > 0) {
+      console.log('Single Location', routeData);
+      const fetchedSingleLocation: LocationModel = LocationModel.fromData(this.activatedRoute.snapshot.data['locations']);
+      this.allLocations.push(fetchedSingleLocation);
+      this.isRedirected = true;
+      this.selectedLocationInitValue = fetchedSingleLocation.getSelfLink();
+      this.tourForm.get('selectedLocation').setValue(fetchedSingleLocation.getSelfLink());
     }
   }
 
@@ -133,19 +144,6 @@ export class AddTourComponent implements OnInit {
     } else if (this.isRedirected) {
       console.log('Adding a tour with new location...');
       this.updateLocation();
-    }
-  }
-
-  private resolveRouteVariables() {
-    const queryParamMap: ParamMap = this.activatedRoute.snapshot.queryParamMap;
-    const locationResourceId = +queryParamMap.get('resourceId');
-
-    if (locationResourceId && locationResourceId > 0) {
-      this.selectLocation(locationResourceId);
-      this.isRedirected = true;
-    } else {
-      this.isRedirected = false;
-      this.tourForm.get('selectedLocation').setValue('');
     }
   }
 
@@ -236,7 +234,7 @@ export class AddTourComponent implements OnInit {
 
   resetForm(): void {
     this.tourForm.reset();
-    this.tourForm.get('selectedLocation').setValue('');
+    this.tourForm.get('selectedLocation').setValue(this.selectedLocationInitValue);
 
     this.setData();
   }
@@ -246,17 +244,17 @@ export class AddTourComponent implements OnInit {
     const endDate = this.tourForm.get('tourDuration').get('toDate').value;
     const location = this.tourForm.get('selectedLocation').value;
     const safaris = this.tourForm.get('safaris').value;
-    const tour: TourModel = new TourModel(startDate, endDate, location, 0, 0, safaris);
+    const tour: TourPostModel = TourPostModel.newInstance().StartDate(startDate).EndDate(endDate).Location(location).Safaris(safaris);
 
     if (this.isEditing) {
-      tour.resourceId = this.currentTour.resourceId;
+      tour.ResourceId(this.currentTour.resourceId);
       this.putData(tour);
     } else {
       this.postData(tour);
     }
   }
 
-  private postData(tour: TourModel) {
+  private postData(tour: TourPostModel) {
     this.httpService.postResource(prepareUrl(['/tours']), tour).subscribe(data => {
       console.log('Tour added', data);
       this.resetForm();
@@ -267,7 +265,7 @@ export class AddTourComponent implements OnInit {
     });
   }
 
-  private putData(tour: TourModel) {
+  private putData(tour: TourPostModel) {
     this.httpService.putResource(prepareUrl(['/tours', tour.resourceId.toString()]), tour).subscribe(data => {
       console.log('Tour updated', data);
       this.resetForm();

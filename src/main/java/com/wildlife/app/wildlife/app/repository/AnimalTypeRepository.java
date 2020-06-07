@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Optional;
 
-@RepositoryRestResource(collectionResourceRel = "animalType", path = "animalType", exported = false)
+@RepositoryRestResource(collectionResourceRel = "animalType", path = "animalType")
 public interface AnimalTypeRepository extends JpaRepository<AnimalType, String> {
     Optional<AnimalType> findByAnimalTypeName(String animalType);
 }

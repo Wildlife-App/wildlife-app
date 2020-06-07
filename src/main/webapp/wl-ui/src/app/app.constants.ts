@@ -47,7 +47,6 @@ export function prepareUrl(urlTokens: string[], queryParams?: QueryParam[]): str
       });
     }
   }
-  console.log('Final URL: ', finalUrl);
   return finalUrl;
 }
 
@@ -74,8 +73,21 @@ export function formatDate(date: Date): string {
 export function equalDates(date1: any, date2: any): boolean {
   const firstDate: Date = parseDate(date1, DATE_FORMAT);
   const secondDate: Date = parseDate(date2, DATE_FORMAT);
-  console.log('First date', firstDate.toDateString());
-  console.log('Second date', secondDate.toDateString());
 
   return firstDate.toDateString() === secondDate.toDateString();
+}
+
+export function doErrorFormalities(error, formErrors): void {
+  console.log('Error while saving', error);
+  if (error.error && error.error.errorMessages) {
+    const errorMessages = error.error.errorMessages;
+    console.log('Error messages', errorMessages);
+    for (let formErrorsKey in formErrors) {
+      console.log('formErrorsKey: ', formErrorsKey);
+      console.log('errorMessages[formErrorsKey]: ', errorMessages[formErrorsKey]);
+      if (errorMessages[formErrorsKey]) {
+        formErrors[formErrorsKey] = errorMessages[formErrorsKey][0];
+      }
+    }
+  }
 }
